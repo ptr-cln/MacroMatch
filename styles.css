@@ -258,6 +258,17 @@ button:hover {
   gap: 16px;
 }
 
+.results-warning {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #6b5b5b;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px dashed rgba(126, 27, 36, 0.25);
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-align: center;
+}
+
 .beta-section {
   display: grid;
   gap: 12px;

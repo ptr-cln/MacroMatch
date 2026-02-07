@@ -91,6 +91,23 @@ const renderEmpty = (key) => {
   `;
 };
 
+const ensureBetaNotice = (shouldShow) => {
+  const existing = document.querySelector("#beta-results-note");
+  if (!shouldShow) {
+    if (existing) existing.remove();
+    return;
+  }
+  if (existing) {
+    existing.textContent = t("beta_results_notice");
+    return;
+  }
+  const note = document.createElement("div");
+  note.id = "beta-results-note";
+  note.className = "results-warning";
+  note.textContent = t("beta_results_notice");
+  resultsGrid.appendChild(note);
+};
+
 const renderMatches = (items) => {
   resultsGrid.innerHTML = "";
   const betaSection = document.querySelector("#beta-section");
@@ -190,6 +207,7 @@ const renderCombos = (combos) => {
     if (rendered < total) {
       setTimeout(renderChunk, 0);
     } else {
+      ensureBetaNotice(total === 3);
       if (betaSection) betaSection.hidden = false;
     }
   };
