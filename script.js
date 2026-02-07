@@ -17,6 +17,12 @@ const getDefaultLang = () => {
 const t = (key) =>
   translations[currentLang]?.[key] || translations.en?.[key] || key;
 
+const trackEvent = (name, params = {}) => {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", name, params);
+  }
+};
+
 const getFoodName = (item) => {
   if (currentLang === "it") return item.name_IT;
   if (currentLang === "es") return item.name_ES;
@@ -921,6 +927,17 @@ form.addEventListener("submit", (event) => {
     fat: clampInput(toNumberOrNull(document.querySelector("#fat").value)),
     carb: clampInput(toNumberOrNull(document.querySelector("#carb").value)),
   };
+  const macroType = target.protein !== null
+    ? "protein"
+    : target.fat !== null
+    ? "fat"
+    : target.carb !== null
+    ? "carb"
+    : "none";
+  trackEvent("match_foods_click", {
+    event_category: "engagement",
+    macro_type: macroType,
+  });
   const filters = {
     avoidMeat: document.querySelector("#avoid-meat")?.checked ?? false,
     avoidFish: document.querySelector("#avoid-fish")?.checked ?? false,
@@ -1112,10 +1129,12 @@ if (betaForm && betaEmailInput) {
   betaForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!validateBetaEmail()) {
+      trackEvent("beta_email_invalid", { event_category: "engagement" });
       return;
     }
 
     const email = betaEmailInput.value.trim();
+    trackEvent("beta_email_submit", { event_category: "engagement" });
     if (betaSubmit) {
       betaSubmit.disabled = true;
       betaSubmit.classList.add("is-loading");
@@ -1138,9 +1157,11 @@ if (betaForm && betaEmailInput) {
         if (!response.ok) throw new Error("submit_failed");
         betaEmailInput.value = "";
         openBetaModal();
+        trackEvent("beta_email_success", { event_category: "engagement" });
       })
       .catch(() => {
         setBetaError("beta_error");
+        trackEvent("beta_email_error", { event_category: "engagement" });
       })
       .finally(() => {
         betaEmailInput.disabled = false;
