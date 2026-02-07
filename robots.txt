@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ptr-cln.github.io/MacroMatch/sitemap.xml
