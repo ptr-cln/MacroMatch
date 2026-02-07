@@ -48,6 +48,8 @@ const applyLanguage = () => {
   if (fatInput) fatInput.placeholder = placeholders.fat;
   const betaEmail = document.querySelector("#beta-email");
   if (betaEmail) betaEmail.placeholder = t("placeholder_email");
+  const betaMessage = document.querySelector("#beta-message");
+  if (betaMessage) betaMessage.placeholder = t("placeholder_feedback");
 
   const resultsTitle = document.querySelector("#results-title");
   if (resultsTitle) resultsTitle.textContent = t("results_title");
@@ -1051,6 +1053,7 @@ initI18n();
 
 const betaForm = document.querySelector("#beta-form");
 const betaEmailInput = document.querySelector("#beta-email");
+const betaMessageInput = document.querySelector("#beta-message");
 const betaError = document.querySelector("#beta-error");
 const betaModal = document.querySelector("#beta-modal");
 const betaClose = document.querySelector("#beta-close");
@@ -1141,10 +1144,18 @@ if (betaForm && betaEmailInput) {
       betaSubmit.textContent = t("beta_sending");
     }
     betaEmailInput.disabled = true;
+    if (betaMessageInput) betaMessageInput.disabled = true;
+
+    const feedback = betaMessageInput ? betaMessageInput.value.trim() : "";
 
     const payload = new FormData();
     payload.append("email", email);
-    payload.append("message", `Email: ${email}\nDate: ${new Date().toLocaleString()}`);
+    payload.append(
+      "message",
+      `Email: ${email}\nDate: ${new Date().toLocaleString()}\nFeedback: ${
+        feedback || "-"
+      }`
+    );
     payload.append("_subject", "MacroMatch Beta Signup");
     payload.append("_captcha", "false");
 
@@ -1156,6 +1167,7 @@ if (betaForm && betaEmailInput) {
       .then((response) => {
         if (!response.ok) throw new Error("submit_failed");
         betaEmailInput.value = "";
+        if (betaMessageInput) betaMessageInput.value = "";
         openBetaModal();
         trackEvent("beta_email_success", { event_category: "engagement" });
       })
@@ -1165,6 +1177,7 @@ if (betaForm && betaEmailInput) {
       })
       .finally(() => {
         betaEmailInput.disabled = false;
+        if (betaMessageInput) betaMessageInput.disabled = false;
         if (betaSubmit) {
           betaSubmit.disabled = false;
           betaSubmit.classList.remove("is-loading");

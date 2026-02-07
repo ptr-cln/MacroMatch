@@ -263,6 +263,39 @@ button:hover {
   gap: 12px;
 }
 
+.beta-feedback {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.beta-feedback textarea {
+  border: 1px solid rgba(126, 27, 36, 0.25);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: #fff;
+  resize: vertical;
+  min-height: 90px;
+}
+
+.beta-feedback textarea:focus {
+  outline: 2px solid var(--red-500);
+}
+
+.beta-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.beta-actions .beta-feedback {
+  grid-column: 1 / -1;
+}
+
 .beta-error {
   font-size: 0.85rem;
   color: #a22b2b;
@@ -313,13 +346,6 @@ button:hover {
   border-radius: 12px;
   font-size: 1rem;
   background: #fff;
-}
-
-.beta-actions {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  align-items: center;
 }
 
 .beta-actions button {
