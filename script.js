@@ -2,6 +2,8 @@
 const resultsGrid = document.querySelector("#results");
 const resultsCount = document.querySelector("#results-count");
 
+const MAX_VISIBLE_RESULTS = 3;
+
 let foods = [];
 
 let translations = {};
@@ -82,6 +84,37 @@ const formatMacros = (item) => {
   return `${t("kcal_label")} ${kcal.toFixed(0)} · ${formatMacroLine(t("macro_protein"), item.protein, "macro--protein")} · ${formatMacroLine(t("macro_fat"), item.fat, "macro--fat")} · ${formatMacroLine(t("macro_carb"), item.carb, "macro--carb")}`;
 };
 
+const comboSignature = (combo) =>
+  combo.items.map((item) => item.id || item.nameIT || item.name).sort().join("|");
+
+const comboRotationState = {
+  signature: "",
+  pool: [],
+  index: 0,
+};
+
+const getRotatedCombos = (combos, count) => {
+  if (!combos.length) return [];
+  if (combos.length <= count) return combos;
+  const signature = combos
+    .map((combo) => comboSignature(combo))
+    .sort()
+    .join("::");
+  if (signature !== comboRotationState.signature) {
+    comboRotationState.signature = signature;
+    comboRotationState.pool = shuffleArray(combos);
+    comboRotationState.index = 0;
+  }
+  const pool = comboRotationState.pool;
+  const start = comboRotationState.index;
+  const selected = [];
+  for (let i = 0; i < count; i += 1) {
+    selected.push(pool[(start + i) % pool.length]);
+  }
+  comboRotationState.index = (start + count) % pool.length;
+  return selected;
+};
+
 const renderEmpty = (key) => {
   const message = t(key);
   resultsGrid.innerHTML = `
@@ -147,13 +180,13 @@ const renderCombos = (combos) => {
     return;
   }
 
-  const shuffled = [...combos].sort(() => Math.random() - 0.5);
-  const total = shuffled.length;
+  const visibleCombos = getRotatedCombos(combos, MAX_VISIBLE_RESULTS);
+  const total = visibleCombos.length;
   let rendered = 0;
   const chunkSize = 5;
 
   const renderChunk = () => {
-    const slice = shuffled.slice(rendered, rendered + chunkSize);
+    const slice = visibleCombos.slice(rendered, rendered + chunkSize);
     slice.forEach((combo, index) => {
       const card = document.createElement("article");
       card.className = "combo-card";
@@ -257,6 +290,13 @@ macroInputs.forEach((selector) => {
 updateInputLocking();
 
 const scoreItem = (item, target) => {
+  const proteinOnly =
+    target.protein !== null && target.fat === null && target.carb === null;
+  if (proteinOnly) {
+    if (item.protein <= 0) return Number.POSITIVE_INFINITY;
+    const gramsNeeded = (target.protein / item.protein) * 100;
+    return gramsNeeded;
+  }
   let score = 0;
   if (target.protein !== null) {
     score += Math.abs(item.protein - target.protein);
@@ -386,6 +426,15 @@ const getGramsBounds = (item, defaultMin, defaultMax, step) => {
   }
   return { min: defaultMin, max: defaultMax, step };
 };
+const MAX_ITEM_KCAL = 800;
+const itemKcalForGrams = (item, grams) =>
+  calcKcal(
+    (item.proteinPer100 * grams) / 100,
+    (item.fatPer100 * grams) / 100,
+    (item.carbPer100 * grams) / 100
+  );
+const isWithinItemKcalLimit = (item, grams) =>
+  itemKcalForGrams(item, grams) <= MAX_ITEM_KCAL;
 const shuffleArray = (items) => {
   const array = [...items];
   for (let i = array.length - 1; i > 0; i -= 1) {
@@ -601,6 +650,7 @@ const buildMacroCombos = (target, filters, maxItems = 2, allowFallback = true) =
         bounds.max
       );
       const items = [{ ...a, grams }];
+      if (!isWithinItemKcalLimit(a, grams)) return;
       const totals = computeTotals(items);
       if (violatesRules(items)) return;
       if (!withinTolerance(totals)) {
@@ -646,7 +696,10 @@ const buildMacroCombos = (target, filters, maxItems = 2, allowFallback = true) =
             { ...a, grams: gramsA },
             { ...b, grams: gramsB },
           ];
-      if (violatesRules(items) || !canUseMultiItemCombo(items, target)) continue;
+          if (!isWithinItemKcalLimit(a, gramsA) || !isWithinItemKcalLimit(b, gramsB)) {
+            continue;
+          }
+          if (violatesRules(items) || !canUseMultiItemCombo(items, target)) continue;
           if (!withinTolerance(totals)) {
             if (shouldForceOliveOil(items, target) && !items.some((item) => isOliveOilItem(item))) {
               continue;
@@ -701,6 +754,13 @@ const buildMacroCombos = (target, filters, maxItems = 2, allowFallback = true) =
                   { ...b, grams: gramsB },
                   { ...c, grams: gramsC },
                 ];
+                if (
+                  !isWithinItemKcalLimit(a, gramsA) ||
+                  !isWithinItemKcalLimit(b, gramsB) ||
+                  !isWithinItemKcalLimit(c, gramsC)
+                ) {
+                  continue;
+                }
                 if (violatesRules(items) || !canUseMultiItemCombo(items, target)) continue;
               if (!withinTolerance(totals)) {
                 if (shouldForceOliveOil(items, target) && !items.some((item) => isOliveOilItem(item))) {
@@ -735,10 +795,10 @@ const buildMacroCombos = (target, filters, maxItems = 2, allowFallback = true) =
     const fallbackCombos = [...fallbackMap.values()];
     if (!fallbackCombos.length) return [];
     const sortedFallback = fallbackCombos.sort((a, b) => a.score - b.score);
-    return selectDiverseCombos(sortedFallback, MAX_RESULTS, { randomize: true });
+    return selectDiverseCombos(sortedFallback, MAX_POOL);
   }
   const sorted = combos.sort((a, b) => a.score - b.score);
-  return selectDiverseCombos(sorted, MAX_RESULTS, { randomize: true });
+  return selectDiverseCombos(sorted, MAX_POOL);
 };
 
 const buildProteinCombos = (targetProtein, filters, maxItems = 2) => {
@@ -754,7 +814,7 @@ const buildProteinCombos = (targetProtein, filters, maxItems = 2) => {
   const candidates = prefilterFoods(
     filters,
     { protein: targetProtein, fat: null, carb: null },
-    12
+    20
   );
   const sources = candidates
     .filter((item) => item.protein > 0)
@@ -796,6 +856,7 @@ const buildProteinCombos = (targetProtein, filters, maxItems = 2) => {
     );
     if (grams < bounds.min || grams > bounds.max) return;
     const items = [{ ...a, grams }];
+    if (!isWithinItemKcalLimit(a, grams)) return;
     if (violatesRules(items)) return;
     const totalProtein = (a.proteinPer100 * grams) / 100;
     const tolerance = targetProtein >= 150 ? 25 : targetProtein >= 100 ? 15 : BASE_TOLERANCE;
@@ -839,6 +900,9 @@ const buildProteinCombos = (targetProtein, filters, maxItems = 2) => {
             { ...a, grams: gramsA },
             { ...b, grams: gramsB },
           ];
+          if (!isWithinItemKcalLimit(a, gramsA) || !isWithinItemKcalLimit(b, gramsB)) {
+            continue;
+          }
           if (violatesRules(items) || !canUseMultiItemCombo(items, target)) continue;
           const proteinB = (b.proteinPer100 * gramsB) / 100;
           const totalProtein = proteinA + proteinB;
@@ -897,6 +961,13 @@ const buildProteinCombos = (targetProtein, filters, maxItems = 2) => {
                 { ...b, grams: gramsB },
                 { ...c, grams: gramsC },
               ];
+              if (
+                !isWithinItemKcalLimit(a, gramsA) ||
+                !isWithinItemKcalLimit(b, gramsB) ||
+                !isWithinItemKcalLimit(c, gramsC)
+              ) {
+                continue;
+              }
               if (violatesRules(items) || !canUseMultiItemCombo(items, target)) continue;
               const proteinC = (c.proteinPer100 * gramsC) / 100;
               const totalProtein = proteinA + proteinB + proteinC;
@@ -929,7 +1000,7 @@ const buildProteinCombos = (targetProtein, filters, maxItems = 2) => {
 
   const combos = [...combosMap.values()];
   const sorted = combos.sort((a, b) => a.score - b.score);
-  return selectDiverseCombos(sorted, MAX_RESULTS, { randomize: true });
+  return selectDiverseCombos(sorted, MAX_POOL);
 };
 
 form.addEventListener("submit", (event) => {
