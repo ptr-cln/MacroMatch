@@ -1,0 +1,98 @@
+﻿<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MacroMatch</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="hero__content">
+          <div class="hero__top">
+            <p class="eyebrow">MacroMatch</p>
+          </div>
+          <h1 data-i18n="hero_title">Trova alimenti in base ai tuoi macronutrienti</h1>
+        </div>
+        <div class="lang-select lang-select--hero">
+          <label for="lang" data-i18n="lang_label">Lingua</label>
+          <select id="lang">
+            <option value="it">Italiano</option>
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </header>
+
+      <section class="macro-panel card">
+        <form id="macro-form">
+          <div class="macro-row">
+            <label>
+              <span data-i18n="label_protein">Proteine (g)</span>
+              <input type="number" id="protein" min="0" max="100" step="1" placeholder="es. 25" />
+            </label>
+            <label>
+              <span data-i18n="label_carb">Carboidrati (g)</span>
+              <input type="number" id="carb" min="0" max="100" step="1" placeholder="es. 40" />
+            </label>
+            <label>
+              <span data-i18n="label_fat">Grassi (g)</span>
+              <input type="number" id="fat" min="0" max="100" step="1" placeholder="es. 10" />
+            </label>
+          </div>
+          <p class="hint" id="hint-text">Seleziona un solo macro alla volta (proteine, carboidrati o grassi).</p>
+          <div class="flag-row">
+            <label class="flag">
+              <input type="checkbox" id="avoid-meat" disabled />
+              <span data-i18n="flag_meat">Evita Carne</span>
+            </label>
+            <label class="flag">
+              <input type="checkbox" id="avoid-fish" disabled />
+              <span data-i18n="flag_fish">Evita Pesce</span>
+            </label>
+            <label class="flag">
+              <input type="checkbox" id="avoid-junk" disabled />
+              <span data-i18n="flag_junk">Evita Junk Food</span>
+              <span class="coming-soon" data-i18n="coming_soon">*Coming Soon</span>
+            </label>
+          </div>
+          <button type="submit" id="match-button">Matcha alimenti</button>
+        </form>
+      </section>
+
+      <section class="card card--results">
+        <div class="results__header">
+          <h2 id="results-title">Risultati</h2>
+          <span id="results-count">Nessun match</span>
+        </div>
+        <div id="results" class="results__grid">
+          <div class="empty-state">
+            <p id="empty-state-text">Compila i tuoi macro per vedere i risultati.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="beta-section" class="card beta-section">
+        <div class="combo-card__header">
+          <h3 data-i18n="beta_title">Beta</h3>
+        </div>
+        <p data-i18n="beta_message">Questo tool attualmente è in fase beta e limitato. Se sei interessato alla versione completa del tool lascia la tua email</p>
+        <form id="beta-form" class="beta-actions">
+          <input type="email" id="beta-email" placeholder="email@example.com" />
+          <button type="submit" id="beta-submit" data-i18n="beta_submit">Invia</button>
+        </form>
+        <p id="beta-error" class="beta-error" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <div id="beta-modal" class="modal" hidden>
+      <div class="modal__content">
+        <p data-i18n="beta_success">Grazie, verrai aggiornato sullo sviluppo del tool.</p>
+        <button type="button" id="beta-close" data-i18n="beta_close">Ok</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
