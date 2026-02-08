@@ -149,17 +149,6 @@ body {
   accent-color: #b5b5b5;
 }
 
-.coming-soon {
-  font-size: 0.62rem !important;
-  font-weight: 700 !important;
-  color: #7e1b24 !important;
-  background: transparent !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-  margin-left: 4px;
-}
 
 
 .macro-row {
@@ -251,6 +240,23 @@ button:hover {
   margin-bottom: 16px;
   font-size: 0.9rem;
   opacity: 0.8;
+}
+
+.results__title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filters-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #7e1b24;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(126, 27, 36, 0.25);
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
 }
 
 .results__grid {

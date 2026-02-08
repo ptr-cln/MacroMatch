@@ -88,19 +88,18 @@
           </div>
           <p class="hint" id="hint-text">Seleziona un solo macro alla volta (proteine, carboidrati o grassi).</p>
           <div class="flag-row">
-            <label class="flag">
-              <input type="checkbox" id="avoid-meat" disabled />
-              <span data-i18n="flag_meat">Evita Carne</span>
-            </label>
-            <label class="flag">
-              <input type="checkbox" id="avoid-fish" disabled />
-              <span data-i18n="flag_fish">Evita Pesce</span>
-            </label>
-            <label class="flag">
-              <input type="checkbox" id="avoid-junk" disabled />
-              <span data-i18n="flag_junk">Evita Junk Food</span>
-              <span class="coming-soon" data-i18n="coming_soon">*Coming Soon</span>
-            </label>
+              <label class="flag">
+                <input type="checkbox" id="avoid-meat" />
+                <span data-i18n="flag_meat">Evita Carne</span>
+              </label>
+              <label class="flag">
+                <input type="checkbox" id="avoid-fish" />
+                <span data-i18n="flag_fish">Evita Pesce</span>
+              </label>
+              <label class="flag">
+                <input type="checkbox" id="avoid-junk" />
+                <span data-i18n="flag_junk">Evita Junk Food</span>
+              </label>
           </div>
           <button type="submit" id="match-button">Matcha alimenti</button>
         </form>
@@ -108,7 +107,12 @@
 
       <section class="card card--results">
         <div class="results__header">
-          <h2 id="results-title">Risultati</h2>
+          <div class="results__title-group">
+            <h2 id="results-title">Risultati</h2>
+            <span id="filters-badge" class="filters-badge" data-i18n="filters_active" hidden>
+              Filtri attivi
+            </span>
+          </div>
           <span id="results-count"></span>
         </div>
         <div id="results" class="results__grid">

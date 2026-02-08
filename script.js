@@ -10,6 +10,7 @@ let lastCombos = [];
 let lastVisibleCombos = [];
 let lastMatches = [];
 let lastEmptyKey = null;
+let hasMatchedOnce = false;
 
 let translations = {};
 let currentLang = "en";
@@ -90,6 +91,19 @@ const applyLanguage = () => {
   if (betaSubmitEl && betaSubmitEl.classList.contains("is-loading")) {
     betaSubmitEl.textContent = t("beta_sending");
   }
+};
+
+const updateFiltersBadge = () => {
+  const badge = document.querySelector("#filters-badge");
+  if (!badge) return;
+  if (!hasMatchedOnce) {
+    badge.hidden = true;
+    return;
+  }
+  const isActive = ["#avoid-meat", "#avoid-fish", "#avoid-junk"].some(
+    (selector) => document.querySelector(selector)?.checked
+  );
+  badge.hidden = !isActive;
 };
 
 const formatMacroLine = (label, value, className) =>
@@ -594,11 +608,13 @@ form.addEventListener("submit", (event) => {
     event_category: "engagement",
     macro_type: macroType,
   });
+  hasMatchedOnce = true;
   const filters = {
     avoidMeat: document.querySelector("#avoid-meat")?.checked ?? false,
     avoidFish: document.querySelector("#avoid-fish")?.checked ?? false,
     avoidJunk: document.querySelector("#avoid-junk")?.checked ?? false,
   };
+  updateFiltersBadge();
 
   if (!foods.length) {
     renderEmpty("error_db");
