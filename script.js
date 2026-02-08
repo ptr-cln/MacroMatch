@@ -37,8 +37,8 @@ const getFoodName = (item) => {
 };
 
 const getComboItemName = (item) => {
-  if (item.name_IT && item.name_EN && item.name_ES) {
-    if (currentLang === "it") return item.name_IT;
+  if (item.nameIT && item.name_EN && item.name_ES) {
+    if (currentLang === "it") return item.nameIT;
     if (currentLang === "es") return item.name_ES;
     return item.name_EN;
   }
@@ -317,34 +317,12 @@ const enforceInputLimit = (input) => {
 };
 
 const macroInputs = ["#protein", "#fat", "#carb"];
-const updateInputLocking = () => {
-  const inputs = macroInputs
-    .map((selector) => document.querySelector(selector))
-    .filter(Boolean);
-  const active = inputs.find((input) => input.value !== "" && Number(input.value) !== 0);
-  inputs.forEach((input) => {
-    const shouldDisable = Boolean(active && input !== active);
-    input.disabled = shouldDisable;
-    if (shouldDisable) {
-      input.value = "";
-    }
-    const label = input.closest("label");
-    if (label) {
-      label.classList.toggle("is-disabled", shouldDisable);
-    }
-  });
-};
-
 macroInputs.forEach((selector) => {
   const input = document.querySelector(selector);
   if (!input) return;
-  input.addEventListener("input", () => updateInputLocking());
-  input.addEventListener("change", () => updateInputLocking());
   input.addEventListener("input", () => enforceInputLimit(input));
   input.addEventListener("blur", () => enforceInputLimit(input));
 });
-
-updateInputLocking();
 
 const scoreItem = (item, target) => {
   const proteinOnly =
@@ -356,13 +334,13 @@ const scoreItem = (item, target) => {
   }
   let score = 0;
   if (target.protein !== null) {
-    score += Math.abs(item.protein - target.protein);
+    score += target.protein === 0 ? item.protein : Math.abs(item.protein - target.protein);
   }
   if (target.fat !== null) {
-    score += Math.abs(item.fat - target.fat);
+    score += target.fat === 0 ? item.fat : Math.abs(item.fat - target.fat);
   }
   if (target.carb !== null) {
-    score += Math.abs(item.carb - target.carb);
+    score += target.carb === 0 ? item.carb : Math.abs(item.carb - target.carb);
   }
   return score;
 };
@@ -370,6 +348,10 @@ const scoreItem = (item, target) => {
 const prefilterFoods = (filters, target, limit = 12) => {
   const filtered = applyCategoryFilters(foods, filters);
   if (!target) return filtered;
+  const activeKeys = ["protein", "fat", "carb"].filter(
+    (key) => target[key] !== null
+  );
+  if (activeKeys.length > 1) return filtered;
   return filtered
     .map((item) => ({ item, score: scoreItem(item, target) }))
     .sort((a, b) => a.score - b.score)
@@ -389,19 +371,6 @@ const applyCategoryFilters = (items, filters) => {
     if (filters.avoidJunk && categories.includes("junk")) return false;
     return true;
   });
-};
-
-const matchFoods = (target, filters) => {
-  const targetKey = ["protein", "fat", "carb"].find((key) => target[key] !== null);
-  return prefilterFoods(filters, target, 10)
-    .filter((item) => !isOliveOilItem(item))
-    .filter((item) => (targetKey ? item[targetKey] > 0 : true))
-    .map((item) => ({
-      ...item,
-      score: scoreItem(item, target),
-    }))
-    .sort((a, b) => a.score - b.score)
-    .slice(0, 6);
 };
 
 const roundToStep = (value, step) => Math.round(value / step) * step;
@@ -450,11 +419,10 @@ const shuffleArray = (items) => {
 };
 
 
-const buildMacroCombos = (target, filters, allowFallback = true) => {
+const buildMacroCombos = (target, filters) => {
   const STEP = 20;
   const MIN_GRAMS = 30;
-  const MAX_GRAMS = 600;
-  const BASE_TOLERANCE = 5;
+  const MAX_GRAMS = 500;
   const MAX_POOL = 60;
 
   const targetKeys = ["protein", "fat", "carb"].filter(
@@ -462,7 +430,10 @@ const buildMacroCombos = (target, filters, allowFallback = true) => {
   );
   if (!targetKeys.length) return [];
 
-  const candidates = prefilterFoods(filters, target, 12);
+  const proteinOnly =
+    target.protein !== null && target.fat === null && target.carb === null;
+  const prefilterLimit = proteinOnly ? 20 : 12;
+  const candidates = prefilterFoods(filters, target, prefilterLimit);
   const sources = [...candidates]
     .filter((item) => item.protein > 0 || item.fat > 0 || item.carb > 0)
     .map((item) => ({
@@ -479,7 +450,6 @@ const buildMacroCombos = (target, filters, allowFallback = true) => {
     }));
 
   const combosMap = new Map();
-  const fallbackMap = new Map();
   const comboKey = (items) =>
     items
       .map((item) => item.id || item.nameIT || item.name)
@@ -522,7 +492,7 @@ const buildMacroCombos = (target, filters, allowFallback = true) => {
     return score;
   };
 
-  const withinTolerance = (totals) => {
+  const withinRange = (totals) => {
     return targetKeys.every((key) => {
       const targetValue = target[key];
       const totalValue =
@@ -531,20 +501,18 @@ const buildMacroCombos = (target, filters, allowFallback = true) => {
           : key === "fat"
           ? totals.totalFat
           : totals.totalCarb;
-      const tolerance = targetValue >= 150 ? 25 : BASE_TOLERANCE;
-      return Math.abs(totalValue - targetValue) <= tolerance;
+      if (targetValue <= 10) {
+        const min = Math.max(0, targetValue - 10);
+        const max = targetValue + 10;
+        return totalValue >= min && totalValue <= max;
+      }
+      const min = targetValue * 0.8;
+      const max = targetValue * 1.2;
+      return totalValue >= min && totalValue <= max;
     });
   };
 
   const shouldStop = () => combosMap.size >= MAX_POOL;
-  const pushFallback = (combo) => {
-    addBest(fallbackMap, combo);
-    if (fallbackMap.size > MAX_POOL) {
-      const sorted = [...fallbackMap.values()].sort((a, b) => a.score - b.score);
-      fallbackMap.clear();
-      sorted.slice(0, MAX_POOL).forEach((item) => addBest(fallbackMap, item));
-    }
-  };
 
   // 1 alimento
   sources.forEach((a) => {
@@ -568,106 +536,13 @@ const buildMacroCombos = (target, filters, allowFallback = true) => {
       const items = [{ ...a, grams }];
       if (!isWithinItemKcalLimit(a, grams)) return;
       const totals = computeTotals(items);
-      if (!withinTolerance(totals)) {
-        pushFallback({
-          items,
-          ...totals,
-          score: scoreCombo(totals),
-        });
-        return;
-      }
+      if (!withinRange(totals)) return;
       addBest(combosMap, {
         items,
         ...totals,
         score: scoreCombo(totals),
       });
     });
-  });
-
-  const combos = [...combosMap.values()];
-  if (!combos.length) {
-    if (!allowFallback) return [];
-    const fallbackCombos = [...fallbackMap.values()];
-    if (!fallbackCombos.length) return [];
-    const sortedFallback = fallbackCombos.sort((a, b) => a.score - b.score);
-    return sortedFallback.slice(0, MAX_POOL);
-  }
-  const sorted = combos.sort((a, b) => a.score - b.score);
-  return sorted.slice(0, MAX_POOL);
-};
-
-const buildProteinCombos = (targetProtein, filters) => {
-  const STEP = targetProtein >= 100 ? 10 : 20;
-  const MIN_GRAMS = 30;
-  const MAX_GRAMS = 600;
-  const BASE_TOLERANCE = 5;
-  const MAX_POOL = 60;
-  const target = { protein: targetProtein, fat: null, carb: null };
-
-  const candidates = prefilterFoods(
-    filters,
-    { protein: targetProtein, fat: null, carb: null },
-    20
-  );
-  const sources = candidates
-    .filter((item) => item.protein > 0)
-    .map((item) => ({
-      id: item.id,
-      name: getFoodName(item),
-      nameIT: item.name_IT,
-      name_EN: item.name_EN,
-      name_ES: item.name_ES,
-      proteinPer100: item.protein,
-      image: item.image,
-      category: item.category,
-      fatPer100: item.fat,
-      carbPer100: item.carb,
-    }));
-
-  const combosMap = new Map();
-  const comboKey = (items) =>
-    items
-      .map((item) => item.id || item.nameIT || item.name)
-      .sort()
-      .join("|");
-  const addBest = (map, combo) => {
-    const key = comboKey(combo.items);
-    const existing = map.get(key);
-    if (!existing || combo.score < existing.score) {
-      map.set(key, combo);
-    }
-  };
-
-  const shouldStop = () => combosMap.size >= MAX_POOL;
-
-  // 1 alimento
-  sources.forEach((a) => {
-    if (shouldStop()) return;
-    if (isOliveOilItem(a)) return;
-    const bounds = getGramsBounds(a, MIN_GRAMS, MAX_GRAMS, STEP);
-    const grams = clamp(
-      roundToStep((targetProtein / a.proteinPer100) * 100, bounds.step),
-      bounds.min,
-      bounds.max
-    );
-    if (grams < bounds.min || grams > bounds.max) return;
-    const items = [{ ...a, grams }];
-    if (!isWithinItemKcalLimit(a, grams)) return;
-    const totalProtein = (a.proteinPer100 * grams) / 100;
-    const tolerance = targetProtein >= 150 ? 25 : targetProtein >= 100 ? 15 : BASE_TOLERANCE;
-    if (Math.abs(totalProtein - targetProtein) <= tolerance) {
-      const totalFat = (a.fatPer100 * grams) / 100;
-      const totalCarb = (a.carbPer100 * grams) / 100;
-      const totalKcal = calcKcal(totalProtein, totalFat, totalCarb);
-      addBest(combosMap, {
-        items,
-        totalProtein,
-        totalFat,
-        totalCarb,
-        totalKcal,
-        score: Math.abs(totalProtein - targetProtein),
-      });
-    }
   });
 
   const combos = [...combosMap.values()];
@@ -680,7 +555,6 @@ form.addEventListener("submit", (event) => {
   const toNumberOrNull = (value) => {
     if (value === "") return null;
     const numberValue = Number(value);
-    if (numberValue === 0) return null;
     return numberValue;
   };
   const clampInput = (value) =>
@@ -690,13 +564,13 @@ form.addEventListener("submit", (event) => {
     fat: clampInput(toNumberOrNull(document.querySelector("#fat").value)),
     carb: clampInput(toNumberOrNull(document.querySelector("#carb").value)),
   };
-  const macroType = target.protein !== null
-    ? "protein"
-    : target.fat !== null
-    ? "fat"
-    : target.carb !== null
-    ? "carb"
-    : "none";
+  const selectedMacros = ["protein", "fat", "carb"].filter(
+    (key) => target[key] !== null
+  );
+  const macroType =
+    selectedMacros.length > 1
+      ? "multi"
+      : selectedMacros[0] || "none";
   trackEvent("match_foods_click", {
     event_category: "engagement",
     macro_type: macroType,
@@ -730,43 +604,16 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  if (filledCount > 1) {
-    renderEmpty("empty_one_macro");
-    resultsCount.textContent = t("results_none");
-    const betaSection = document.querySelector("#beta-section");
-    if (betaSection) betaSection.hidden = false;
-    return;
-  }
-
-  const isProteinOnly =
-    target.protein !== null && target.fat === null && target.carb === null;
-
-  if (isProteinOnly) {
-    const combos = buildProteinCombos(target.protein, filters);
-    if (combos.length) {
-      renderCombos(combos);
-      return;
-    }
-    const matches = matchFoods(target, filters);
-    renderMatches(matches);
-    return;
-  }
-
-  const providedMacros = [
-    target.protein,
-    target.fat,
-    target.carb,
-  ].filter((value) => value !== null).length;
-  const allowFallback = providedMacros <= 1;
-
-  const combos = buildMacroCombos(target, filters, allowFallback);
+  const combos = buildMacroCombos(target, filters);
   if (combos.length) {
     renderCombos(combos);
     return;
   }
 
-  const matches = matchFoods(target, filters);
-  renderMatches(matches);
+  renderEmpty("empty_no_combos");
+  resultsCount.textContent = t("results_none");
+  const betaSection = document.querySelector("#beta-section");
+  if (betaSection) betaSection.hidden = false;
 });
 
 fetch("data.json")
