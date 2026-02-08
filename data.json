@@ -393,7 +393,8 @@
         "carb":  28,
         "category":  "junk",
         "image":  "img/food-036.jpg",
-        "id":  "food-036"
+        "id":  "food-036",
+        "unique_weight" : 250
     },
     {
         "name_IT":  "Hamburger",
@@ -404,7 +405,8 @@
         "carb":  30,
         "category":  "meat,hamburger",
         "image":  "img/food-037.jpg",
-        "id":  "food-037"
+        "id":  "food-037",
+        "unique_weight" : 200
     },
     {
         "name_IT":  "Patatine fritte",
@@ -426,7 +428,8 @@
         "carb":  28,
         "category":  "junk",
         "image":  "img/food-039.jpg",
-        "id":  "food-039"
+        "id":  "food-039",
+        "unique_weight" : 250
     },
     {
         "name_IT":  "Cioccolato al latte",
@@ -459,7 +462,8 @@
         "carb":  45,
         "category":  "junk,sweets",
         "image":  "img/food-042.jpg",
-        "id":  "food-042"
+        "id":  "food-042",
+        "unique_weight" : 100
     },
     {
         "name_IT":  "Brownie",
@@ -492,7 +496,8 @@
         "carb":  45,
         "category":  "junk,sweets",
         "image":  "img/food-045.jpg",
-        "id":  "food-045"
+        "id":  "food-045",
+        "unique_weight" : 100
     },
     {
         "name_IT":  "Orecchiette integrali",
@@ -690,7 +695,8 @@
         "carb":  30,
         "category":  "junk",
         "image":  "img/food-072.jpg",
-        "id":  "food-072"
+        "id":  "food-072",
+        "unique_weight" : 250
     },
     {
         "name_IT":  "Cioccolata fondente",
@@ -723,18 +729,20 @@
         "carb":  32,
         "category":  "junk",
         "image":  "img/food-077.jpg",
-        "id":  "food-077"
+        "id":  "food-077",
+        "unique_weight": 100
     },
     {
         "name_IT":  "Burrito",
         "name_EN":  "Burrito",
         "name_ES":  "Burrito",
         "protein":  12,
-        "fat":  15,
-        "carb":  45,
+        "fat":  8,
+        "carb":  27,
         "category":  "junk",
         "image":  "img/food-078.jpg",
-        "id":  "food-078"
+        "id":  "food-078",
+        "unique_weight": 250
     },
     {
         "name_IT":  "Pancakes",

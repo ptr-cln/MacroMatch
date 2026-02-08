@@ -133,6 +133,7 @@ const getRotatedCombos = (combos, count) => {
   return selected;
 };
 
+
 const renderEmpty = (key) => {
   const message = t(key);
   resultsGrid.innerHTML = `
@@ -390,13 +391,18 @@ const isOliveOilItem = (item) => {
     name.includes("olio d'oliva")
   );
 };
-const isHamburgerItem = (item) => hasCategory(item, "hamburger");
+const getUniqueWeight = (item) => {
+  if (item.unique_weight === undefined || item.unique_weight === null) return null;
+  const value = Number(item.unique_weight);
+  return Number.isFinite(value) && value > 0 ? value : null;
+};
 const getGramsBounds = (item, defaultMin, defaultMax, step) => {
   if (isOliveOilItem(item)) {
     return { min: 5, max: 20, step: 5 };
   }
-  if (isHamburgerItem(item)) {
-    return { min: 100, max: 200, step: 100 };
+  const uniqueWeight = getUniqueWeight(item);
+  if (uniqueWeight) {
+    return { min: uniqueWeight, max: uniqueWeight, step: uniqueWeight };
   }
   return { min: defaultMin, max: defaultMax, step };
 };
@@ -430,10 +436,10 @@ const buildMacroCombos = (target, filters) => {
   );
   if (!targetKeys.length) return [];
 
-  const proteinOnly =
-    target.protein !== null && target.fat === null && target.carb === null;
-  const prefilterLimit = proteinOnly ? 20 : 12;
-  const candidates = prefilterFoods(filters, target, prefilterLimit);
+  const candidates =
+    targetKeys.length === 1
+      ? applyCategoryFilters(foods, filters)
+      : prefilterFoods(filters, target, 12);
   const sources = [...candidates]
     .filter((item) => item.protein > 0 || item.fat > 0 || item.carb > 0)
     .map((item) => ({
@@ -444,6 +450,7 @@ const buildMacroCombos = (target, filters) => {
       name_ES: item.name_ES,
       image: item.image,
       category: item.category,
+      unique_weight: item.unique_weight,
       proteinPer100: item.protein,
       fatPer100: item.fat,
       carbPer100: item.carb,
@@ -489,6 +496,14 @@ const buildMacroCombos = (target, filters) => {
       const denom = targetValue === 0 ? 1 : targetValue;
       score += Math.abs(totalValue - targetValue) / denom;
     });
+    if (targetKeys.length === 1) {
+      const onlyKey = targetKeys[0];
+      const extraProtein = onlyKey === "protein" ? 0 : totals.totalProtein;
+      const extraFat = onlyKey === "fat" ? 0 : totals.totalFat;
+      const extraCarb = onlyKey === "carb" ? 0 : totals.totalCarb;
+      const extraSum = extraProtein + extraFat + extraCarb;
+      score += extraSum / 200;
+    }
     return score;
   };
 
@@ -528,11 +543,15 @@ const buildMacroCombos = (target, filters) => {
       if (per100 <= 0) return;
       if (isOliveOilItem(a)) return;
       const bounds = getGramsBounds(a, MIN_GRAMS, MAX_GRAMS, STEP);
-      const grams = clamp(
+      let grams = clamp(
         roundToStep((target[key] / per100) * 100, bounds.step),
         bounds.min,
         bounds.max
       );
+      const forcedWeight = getUniqueWeight(a);
+      if (forcedWeight) {
+        grams = forcedWeight;
+      }
       const items = [{ ...a, grams }];
       if (!isWithinItemKcalLimit(a, grams)) return;
       const totals = computeTotals(items);
@@ -619,7 +638,16 @@ form.addEventListener("submit", (event) => {
 fetch("data.json")
   .then((response) => response.json())
   .then((data) => {
-    foods = data;
+    foods = data.map((item) => {
+      const normalizedWeight = getUniqueWeight(item);
+      return {
+        ...item,
+        unique_weight:
+          normalizedWeight !== null && normalizedWeight !== undefined
+            ? normalizedWeight
+            : item.unique_weight,
+      };
+    });
   })
   .catch(() => {
     renderEmpty("error_db");
