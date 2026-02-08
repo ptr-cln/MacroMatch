@@ -74,7 +74,7 @@ const applyLanguage = () => {
   const resultsTitle = document.querySelector("#results-title");
   if (resultsTitle) resultsTitle.textContent = t("results_title");
   const resultsCount = document.querySelector("#results-count");
-  if (resultsCount) resultsCount.textContent = t("results_none");
+  if (resultsCount) resultsCount.textContent = "";
   const hintText = document.querySelector("#hint-text");
   if (hintText) hintText.textContent = t("hint_one_macro");
   const emptyState = document.querySelector("#empty-state-text");
@@ -176,7 +176,7 @@ const renderStoredResults = () => {
   }
   if (lastResultsType === "empty" && lastEmptyKey) {
     renderEmpty(lastEmptyKey);
-    resultsCount.textContent = t("results_none");
+    resultsCount.textContent = "";
     const betaSection = document.querySelector("#beta-section");
     if (betaSection) betaSection.hidden = false;
   }
@@ -189,7 +189,7 @@ const renderMatches = (items) => {
 
   if (!items.length) {
     renderEmpty("empty_no_combos");
-    resultsCount.textContent = t("results_none");
+    resultsCount.textContent = "";
     return;
   }
 
@@ -222,7 +222,7 @@ const renderCombos = (combos, options = {}) => {
 
   if (!combos.length) {
     renderEmpty("empty_no_combos");
-    resultsCount.textContent = t("results_none");
+    resultsCount.textContent = "";
     if (betaSection) betaSection.hidden = false;
     return;
   }
@@ -602,7 +602,7 @@ form.addEventListener("submit", (event) => {
 
   if (!foods.length) {
     renderEmpty("error_db");
-    resultsCount.textContent = t("results_none");
+    resultsCount.textContent = "";
     const betaSection = document.querySelector("#beta-section");
     if (betaSection) betaSection.hidden = false;
     return;
@@ -617,7 +617,7 @@ form.addEventListener("submit", (event) => {
 
   if (!hasAnyMacro) {
     renderEmpty("empty_no_macro");
-    resultsCount.textContent = t("results_none");
+    resultsCount.textContent = "";
     const betaSection = document.querySelector("#beta-section");
     if (betaSection) betaSection.hidden = false;
     return;
@@ -630,7 +630,7 @@ form.addEventListener("submit", (event) => {
   }
 
   renderEmpty("empty_no_combos");
-  resultsCount.textContent = t("results_none");
+  resultsCount.textContent = "";
   const betaSection = document.querySelector("#beta-section");
   if (betaSection) betaSection.hidden = false;
 });

@@ -542,6 +542,14 @@ button:hover {
   font-size: 0.95rem;
 }
 
+#empty-state-text {
+  font-weight: 700;
+}
+
+.empty-state p {
+  font-weight: 700;
+}
+
 @media (max-width: 800px) {
   .macro-row {
     grid-template-columns: 1fr;
