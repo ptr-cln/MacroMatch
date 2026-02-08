@@ -5,6 +5,11 @@ const resultsCount = document.querySelector("#results-count");
 const MAX_VISIBLE_RESULTS = 3;
 
 let foods = [];
+let lastResultsType = null;
+let lastCombos = [];
+let lastVisibleCombos = [];
+let lastMatches = [];
+let lastEmptyKey = null;
 
 let translations = {};
 let currentLang = "en";
@@ -29,6 +34,19 @@ const getFoodName = (item) => {
   if (currentLang === "it") return item.name_IT;
   if (currentLang === "es") return item.name_ES;
   return item.name_EN;
+};
+
+const getComboItemName = (item) => {
+  if (item.name_IT && item.name_EN && item.name_ES) {
+    if (currentLang === "it") return item.name_IT;
+    if (currentLang === "es") return item.name_ES;
+    return item.name_EN;
+  }
+  if (item.id && foods.length) {
+    const source = foods.find((food) => food.id === item.id);
+    if (source) return getFoodName(source);
+  }
+  return item.name || item.nameIT || item.name_IT || "";
 };
 
 const applyLanguage = () => {
@@ -122,6 +140,11 @@ const renderEmpty = (key) => {
       <p>${message}</p>
     </div>
   `;
+  lastResultsType = "empty";
+  lastEmptyKey = key;
+  lastCombos = [];
+  lastVisibleCombos = [];
+  lastMatches = [];
 };
 
 const ensureBetaNotice = (shouldShow) => {
@@ -139,6 +162,23 @@ const ensureBetaNotice = (shouldShow) => {
   note.className = "results-warning";
   note.textContent = t("beta_results_notice");
   resultsGrid.appendChild(note);
+};
+
+const renderStoredResults = () => {
+  if (lastResultsType === "combos" && lastVisibleCombos.length) {
+    renderCombos(lastVisibleCombos, { preserveSelection: true });
+    return;
+  }
+  if (lastResultsType === "matches" && lastMatches.length) {
+    renderMatches(lastMatches);
+    return;
+  }
+  if (lastResultsType === "empty" && lastEmptyKey) {
+    renderEmpty(lastEmptyKey);
+    resultsCount.textContent = t("results_none");
+    const betaSection = document.querySelector("#beta-section");
+    if (betaSection) betaSection.hidden = false;
+  }
 };
 
 const renderMatches = (items) => {
@@ -167,9 +207,15 @@ const renderMatches = (items) => {
   });
 
   resultsCount.textContent = `${items.length} ${t("results_label")}`;
+  lastResultsType = "matches";
+  lastMatches = items;
+  lastCombos = [];
+  lastVisibleCombos = [];
+  lastEmptyKey = null;
 };
 
-const renderCombos = (combos) => {
+const renderCombos = (combos, options = {}) => {
+  const { preserveSelection = false } = options;
   resultsGrid.innerHTML = "";
   const betaSection = document.querySelector("#beta-section");
 
@@ -180,8 +226,18 @@ const renderCombos = (combos) => {
     return;
   }
 
-  const visibleCombos = getRotatedCombos(combos, MAX_VISIBLE_RESULTS);
+  const visibleCombos =
+    preserveSelection && lastVisibleCombos.length
+      ? lastVisibleCombos
+      : getRotatedCombos(combos, MAX_VISIBLE_RESULTS);
   const total = visibleCombos.length;
+  if (!preserveSelection) {
+    lastResultsType = "combos";
+    lastCombos = combos;
+    lastVisibleCombos = visibleCombos;
+    lastMatches = [];
+    lastEmptyKey = null;
+  }
   let rendered = 0;
   const chunkSize = 5;
 
@@ -206,15 +262,16 @@ const renderCombos = (combos) => {
         <ul class="combo-list">
           ${combo.items
             .map((item) => {
+              const displayName = getComboItemName(item);
               const protein = ((item.proteinPer100 * item.grams) / 100).toFixed(1);
               const fat = ((item.fatPer100 * item.grams) / 100).toFixed(1);
               const carb = ((item.carbPer100 * item.grams) / 100).toFixed(1);
               const kcal = calcKcal(Number(protein), Number(fat), Number(carb)).toFixed(0);
               return `
                 <li class="combo-item">
-                  <img src="${item.image}" alt="${item.name}" />
+                  <img src="${item.image}" alt="${displayName}" />
                   <div>
-                    <div class="combo-item__title">${item.name}</div>
+                    <div class="combo-item__title">${displayName}</div>
                     <div class="combo-item__meta">${item.grams}g · ${t("kcal_label")} ${kcal}</div>
                     <div class="macro-line">
                       ${formatMacroLine(t("macro_protein"), protein, "macro--protein")}
@@ -412,6 +469,8 @@ const buildMacroCombos = (target, filters, allowFallback = true) => {
       id: item.id,
       name: getFoodName(item),
       nameIT: item.name_IT,
+      name_EN: item.name_EN,
+      name_ES: item.name_ES,
       image: item.image,
       category: item.category,
       proteinPer100: item.protein,
@@ -556,6 +615,8 @@ const buildProteinCombos = (targetProtein, filters) => {
       id: item.id,
       name: getFoodName(item),
       nameIT: item.name_IT,
+      name_EN: item.name_EN,
+      name_ES: item.name_ES,
       proteinPer100: item.protein,
       image: item.image,
       category: item.category,
@@ -730,7 +791,7 @@ const initI18n = () => {
           currentLang = langSelect.value;
           document.documentElement.lang = currentLang;
           applyLanguage();
-          if (form) form.requestSubmit();
+          renderStoredResults();
         });
       }
       document.documentElement.lang = currentLang;
