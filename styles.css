@@ -259,12 +259,13 @@ button:hover {
 }
 
 .results-warning {
-  font-size: 1rem;
+  font-size: 1.02rem;
   font-weight: 700;
-  color: #6b5b5b;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px dashed rgba(126, 27, 36, 0.25);
-  padding: 12px 14px;
+  color: #7e1b24;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.95), rgba(255, 236, 232, 0.95));
+  border: 1px solid rgba(199, 59, 59, 0.35);
+  box-shadow: 0 10px 20px rgba(199, 59, 59, 0.15);
+  padding: 14px 16px;
   border-radius: 12px;
   text-align: center;
 }
