@@ -257,7 +257,7 @@ const ensureGhostOption = (combo, indexLabel) => {
 
 const renderStoredResults = () => {
   if (lastResultsType === "combos" && lastVisibleCombos.length) {
-    renderCombos(lastVisibleCombos, { preserveSelection: true });
+    renderCombos(lastCombos, { preserveSelection: true });
     return;
   }
   if (lastResultsType === "matches" && lastMatches.length) {
