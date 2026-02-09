@@ -261,17 +261,10 @@ const renderCombos = (combos, options = {}) => {
     slice.forEach((combo, index) => {
       const card = document.createElement("article");
       card.className = "combo-card";
-    const totals = `
-        <span class="macro macro--kcal"><strong>${t("kcal_label")} ${combo.totalKcal.toFixed(0)}</strong></span>
-        ${formatMacroLine(t("macro_protein"), combo.totalProtein.toFixed(1), "macro--protein")}
-        ${formatMacroLine(t("macro_fat"), combo.totalFat.toFixed(1), "macro--fat")}
-        ${formatMacroLine(t("macro_carb"), combo.totalCarb.toFixed(1), "macro--carb")}
-      `;
       const comboIndex = rendered + index + 1;
       card.innerHTML = `
         <div class="combo-card__header">
           <h3>${t("combination_label")} ${comboIndex}</h3>
-          <div class="macro-line">${totals}</div>
         </div>
         <div class="combo-divider" aria-hidden="true"></div>
         <ul class="combo-list">
@@ -284,10 +277,12 @@ const renderCombos = (combos, options = {}) => {
               const kcal = calcKcal(Number(protein), Number(fat), Number(carb)).toFixed(0);
               return `
                 <li class="combo-item">
-                  <img src="${item.image}" alt="${displayName}" />
+                  <div class="combo-item__media">
+                    <img src="${item.image}" alt="${displayName}" />
+                  </div>
                   <div>
                     <div class="combo-item__title">${displayName}</div>
-                    <div class="combo-item__meta">${item.grams}g · ${t("kcal_label")} ${kcal}</div>
+                    <div class="combo-item__meta"><strong>${item.grams}g · ${t("kcal_label")} ${kcal}</strong></div>
                     <div class="macro-line">
                       ${formatMacroLine(t("macro_protein"), protein, "macro--protein")}
                       ${formatMacroLine(t("macro_fat"), fat, "macro--fat")}
