@@ -140,6 +140,9 @@ const renderEmpty = (key) => {
       <p>${message}</p>
     </div>
   `;
+  if (key === "empty_no_combos") {
+    trackEvent("no_matches", { event_category: "engagement" });
+  }
   lastResultsType = "empty";
   lastEmptyKey = key;
   lastCombos = [];
@@ -740,6 +743,16 @@ const initI18n = () => {
 };
 
 initI18n();
+
+document.querySelectorAll('input[name="diet"]').forEach((input) => {
+  input.addEventListener("change", () => {
+    const diet = getSelectedDiet();
+    trackEvent("diet_change", {
+      event_category: "engagement",
+      diet,
+    });
+  });
+});
 
 const betaForm = document.querySelector("#beta-form");
 const betaEmailInput = document.querySelector("#beta-email");
