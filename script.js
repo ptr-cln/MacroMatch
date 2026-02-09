@@ -329,10 +329,12 @@ const renderCombos = (combos, options = {}) => {
     });
 
     rendered += slice.length;
+    const countLabel =
+      total === 1 ? t("combination_label_count") : t("combinations_label");
     resultsCount.textContent =
       rendered < total
-        ? `${rendered} / ${total} ${t("combinations_label")}`
-        : `${total} ${t("combinations_label")}`;
+        ? `${rendered} / ${total} ${countLabel}`
+        : `${total} ${countLabel}`;
 
     if (rendered < total) {
       setTimeout(renderChunk, 0);

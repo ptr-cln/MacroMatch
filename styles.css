@@ -466,6 +466,10 @@ button:hover {
   font-size: 0.95rem;
 }
 
+.combo-card__header h3 {
+  color: rgba(27, 13, 15, 0.72);
+}
+
 .combo-card__header .macro-line {
   display: grid;
   justify-items: end;
