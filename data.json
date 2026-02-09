@@ -50,7 +50,7 @@
         "protein":  13,
         "fat":  11,
         "carb":  1,
-        "category":  "dairy/eggs",
+        "category":  "eggs",
         "image":  "img/food-005.jpg",
         "id":  "food-005"
     },
@@ -61,7 +61,7 @@
         "protein":  11,
         "fat":  0,
         "carb":  0.7,
-        "category":  "dairy/eggs",
+        "category":  "eggs",
         "image":  "img/food-006.jpg",
         "id":  "food-006"
     },
@@ -72,7 +72,7 @@
         "protein":  10,
         "fat":  0,
         "carb":  4,
-        "category":  "dairy/eggs,sweets",
+        "category":  "dairy",
         "image":  "img/food-007.jpg",
         "id":  "food-007"
     },
@@ -83,7 +83,7 @@
         "protein":  22,
         "fat":  22,
         "carb":  2.2,
-        "category":  "dairy/eggs",
+        "category":  "dairy",
         "image":  "img/food-008.jpg",
         "id":  "food-008"
     },
@@ -94,7 +94,7 @@
         "protein":  15,
         "fat":  9,
         "carb":  4,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-009.jpg",
         "id":  "food-009"
     },
@@ -105,7 +105,7 @@
         "protein":  19,
         "fat":  11,
         "carb":  9,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-010.jpg",
         "id":  "food-010"
     },
@@ -116,7 +116,7 @@
         "protein":  9,
         "fat":  0.4,
         "carb":  20,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-011.jpg",
         "id":  "food-011"
     },
@@ -127,7 +127,7 @@
         "protein":  9,
         "fat":  2.6,
         "carb":  27,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-012.jpg",
         "id":  "food-012"
     },
@@ -138,7 +138,7 @@
         "protein":  8,
         "fat":  0.5,
         "carb":  23,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-013.jpg",
         "id":  "food-013"
     },
@@ -149,7 +149,7 @@
         "protein":  2.6,
         "fat":  0.9,
         "carb":  23,
-        "category":  "grain,rice",
+        "category":  "",
         "image":  "img/food-014.jpg",
         "id":  "food-014"
     },
@@ -160,7 +160,7 @@
         "protein":  4.4,
         "fat":  1.9,
         "carb":  21,
-        "category":  "grain",
+        "category":  "",
         "image":  "img/food-015.jpg",
         "id":  "food-015"
     },
@@ -171,7 +171,7 @@
         "protein":  17,
         "fat":  7,
         "carb":  66,
-        "category":  "grain,sweets",
+        "category":  "",
         "image":  "img/food-016.jpg",
         "id":  "food-016"
     },
@@ -182,7 +182,7 @@
         "protein":  13,
         "fat":  3.5,
         "carb":  41,
-        "category":  "grain",
+        "category":  "",
         "image":  "img/food-017.jpg",
         "id":  "food-017"
     },
@@ -193,7 +193,7 @@
         "protein":  2.9,
         "fat":  0.4,
         "carb":  3.6,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-018.jpg",
         "id":  "food-018"
     },
@@ -204,7 +204,7 @@
         "protein":  2.8,
         "fat":  0.4,
         "carb":  7,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-019.jpg",
         "id":  "food-019"
     },
@@ -215,7 +215,7 @@
         "protein":  0.9,
         "fat":  0.2,
         "carb":  10,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-020.jpg",
         "id":  "food-020"
     },
@@ -226,7 +226,7 @@
         "protein":  0.9,
         "fat":  0.2,
         "carb":  3.9,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-021.jpg",
         "id":  "food-021"
     },
@@ -237,7 +237,7 @@
         "protein":  1,
         "fat":  0.2,
         "carb":  6,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-022.jpg",
         "id":  "food-022"
     },
@@ -248,7 +248,7 @@
         "protein":  0.7,
         "fat":  0.1,
         "carb":  3.6,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-023.jpg",
         "id":  "food-023"
     },
@@ -259,7 +259,7 @@
         "protein":  1.2,
         "fat":  0.3,
         "carb":  3.1,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-024.jpg",
         "id":  "food-024"
     },
@@ -270,7 +270,7 @@
         "protein":  3.1,
         "fat":  0.3,
         "carb":  3.3,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-025.jpg",
         "id":  "food-025"
     },
@@ -281,7 +281,7 @@
         "protein":  0.3,
         "fat":  0.2,
         "carb":  14,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-026.jpg",
         "id":  "food-026"
     },
@@ -292,7 +292,7 @@
         "protein":  1.1,
         "fat":  0.3,
         "carb":  23,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-027.jpg",
         "id":  "food-027"
     },
@@ -303,7 +303,7 @@
         "protein":  0.8,
         "fat":  0.3,
         "carb":  7.7,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-028.jpg",
         "id":  "food-028"
     },
@@ -314,7 +314,7 @@
         "protein":  0.9,
         "fat":  0.1,
         "carb":  12,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-029.jpg",
         "id":  "food-029"
     },
@@ -325,7 +325,7 @@
         "protein":  0.7,
         "fat":  0.3,
         "carb":  14,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-030.jpg",
         "id":  "food-030"
     },
@@ -336,7 +336,7 @@
         "protein":  1.2,
         "fat":  0.3,
         "carb":  12,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-031.jpg",
         "id":  "food-031"
     },
@@ -347,7 +347,7 @@
         "protein":  1.1,
         "fat":  0.5,
         "carb":  15,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-032.jpg",
         "id":  "food-032"
     },
@@ -358,7 +358,7 @@
         "protein":  2,
         "fat":  15,
         "carb":  9,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-033.jpg",
         "id":  "food-033"
     },
@@ -369,7 +369,7 @@
         "protein":  1.6,
         "fat":  0.1,
         "carb":  20,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-034.jpg",
         "id":  "food-034"
     },
@@ -380,7 +380,7 @@
         "protein":  2,
         "fat":  0.1,
         "carb":  17,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-035.jpg",
         "id":  "food-035"
     },
@@ -391,7 +391,7 @@
         "protein":  11,
         "fat":  9,
         "carb":  28,
-        "category":  "junk",
+        "category":  "dairy",
         "image":  "img/food-036.jpg",
         "id":  "food-036",
         "unique_weight" : 250
@@ -403,7 +403,7 @@
         "protein":  25,
         "fat":  15,
         "carb":  30,
-        "category":  "meat,hamburger",
+        "category":  "meat",
         "image":  "img/food-037.jpg",
         "id":  "food-037",
         "unique_weight" : 200
@@ -415,7 +415,7 @@
         "protein":  3.4,
         "fat":  15,
         "carb":  41,
-        "category":  "junk",
+        "category":  "",
         "image":  "img/food-038.jpg",
         "id":  "food-038"
     },
@@ -426,7 +426,7 @@
         "protein":  12,
         "fat":  15,
         "carb":  28,
-        "category":  "junk",
+        "category":  "meat",
         "image":  "img/food-039.jpg",
         "id":  "food-039",
         "unique_weight" : 250
@@ -438,7 +438,7 @@
         "protein":  7.6,
         "fat":  30,
         "carb":  59,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-040.jpg",
         "id":  "food-040"
     },
@@ -449,7 +449,7 @@
         "protein":  3.5,
         "fat":  7,
         "carb":  23,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-041.jpg",
         "id":  "food-041"
     },
@@ -460,7 +460,7 @@
         "protein":  8,
         "fat":  17,
         "carb":  45,
-        "category":  "junk,sweets",
+        "category":  "dairy,eggs",
         "image":  "img/food-042.jpg",
         "id":  "food-042",
         "unique_weight" : 100
@@ -472,7 +472,7 @@
         "protein":  5,
         "fat":  20,
         "carb":  35,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-043.jpg",
         "id":  "food-043"
     },
@@ -483,7 +483,7 @@
         "protein":  7,
         "fat":  15,
         "carb":  45,
-        "category":  "junk",
+        "category":  "",
         "image":  "img/food-044.jpg",
         "id":  "food-044"
     },
@@ -494,7 +494,7 @@
         "protein":  4,
         "fat":  20,
         "carb":  45,
-        "category":  "junk,sweets",
+        "category":  "dairy,eggs",
         "image":  "img/food-045.jpg",
         "id":  "food-045",
         "unique_weight" : 100
@@ -506,7 +506,7 @@
         "protein":  13,
         "fat":  1.5,
         "carb":  70,
-        "category":  "grain,pasta",
+        "category":  "",
         "image":  "img/food-046.jpg",
         "id":  "food-046"
     },
@@ -517,7 +517,7 @@
         "protein":  2.4,
         "fat":  0.4,
         "carb":  28,
-        "category":  "grain,rice",
+        "category":  "",
         "image":  "img/food-047.jpg",
         "id":  "food-047"
     },
@@ -528,7 +528,7 @@
         "protein":  1.8,
         "fat":  0.1,
         "carb":  7,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-048.jpg",
         "id":  "food-048"
     },
@@ -539,7 +539,7 @@
         "protein":  1.9,
         "fat":  0.3,
         "carb":  5,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-049.jpg",
         "id":  "food-049"
     },
@@ -550,7 +550,7 @@
         "protein":  1.1,
         "fat":  0.1,
         "carb":  9,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-050.jpg",
         "id":  "food-050"
     },
@@ -561,7 +561,7 @@
         "protein":  21,
         "fat":  49,
         "carb":  22,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-052.jpg",
         "id":  "food-052"
     },
@@ -572,7 +572,7 @@
         "protein":  15,
         "fat":  65,
         "carb":  14,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-053.jpg",
         "id":  "food-053"
     },
@@ -583,7 +583,7 @@
         "protein":  5,
         "fat":  0.4,
         "carb":  14,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-058.jpg",
         "id":  "food-058"
     },
@@ -594,7 +594,7 @@
         "protein":  0.4,
         "fat":  0.1,
         "carb":  15,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-060.jpg",
         "id":  "food-060"
     },
@@ -605,7 +605,7 @@
         "protein":  3.3,
         "fat":  33,
         "carb":  15,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-062.jpg",
         "id":  "food-062"
     },
@@ -616,7 +616,7 @@
         "protein":  3.4,
         "fat":  0.1,
         "carb":  5,
-        "category":  "dairy/eggs,sweets",
+        "category":  "dairy",
         "image":  "img/food-063.jpg",
         "id":  "food-063"
     },
@@ -627,7 +627,7 @@
         "protein":  3.3,
         "fat":  3.7,
         "carb":  5,
-        "category":  "dairy/eggs,sweets",
+        "category":  "dairy",
         "image":  "img/food-064.jpg",
         "id":  "food-064"
     },
@@ -638,7 +638,7 @@
         "protein":  25,
         "fat":  33,
         "carb":  1.3,
-        "category":  "dairy/eggs",
+        "category":  "dairy",
         "image":  "img/food-065.jpg",
         "id":  "food-065"
     },
@@ -649,7 +649,7 @@
         "protein":  14,
         "fat":  21,
         "carb":  4,
-        "category":  "dairy/eggs",
+        "category":  "dairy",
         "image":  "img/food-066.jpg",
         "id":  "food-066"
     },
@@ -660,7 +660,7 @@
         "protein":  12,
         "fat":  25,
         "carb":  2,
-        "category":  "junk",
+        "category":  "meat",
         "image":  "img/food-067.jpg",
         "id":  "food-067"
     },
@@ -671,7 +671,7 @@
         "protein":  37,
         "fat":  42,
         "carb":  1,
-        "category":  "junk",
+        "category":  "meat",
         "image":  "img/food-068.jpg",
         "id":  "food-068"
     },
@@ -682,7 +682,7 @@
         "protein":  3,
         "fat":  12,
         "carb":  35,
-        "category":  "junk",
+        "category":  "",
         "image":  "img/food-069.jpg",
         "id":  "food-069"
     },
@@ -693,7 +693,7 @@
         "protein":  12,
         "fat":  10,
         "carb":  30,
-        "category":  "junk",
+        "category":  "dairy",
         "image":  "img/food-072.jpg",
         "id":  "food-072",
         "unique_weight" : 250
@@ -705,7 +705,7 @@
         "protein":  7,
         "fat":  31,
         "carb":  46,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-075.jpg",
         "id":  "food-075"
     },
@@ -716,7 +716,7 @@
         "protein":  3,
         "fat":  7,
         "carb":  23,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-076.jpg",
         "id":  "food-076"
     },
@@ -727,7 +727,7 @@
         "protein":  9,
         "fat":  14,
         "carb":  32,
-        "category":  "junk",
+        "category":  "meat",
         "image":  "img/food-077.jpg",
         "id":  "food-077",
         "unique_weight": 100
@@ -739,7 +739,7 @@
         "protein":  12,
         "fat":  8,
         "carb":  27,
-        "category":  "junk",
+        "category":  "meat",
         "image":  "img/food-078.jpg",
         "id":  "food-078",
         "unique_weight": 250
@@ -751,7 +751,7 @@
         "protein":  6,
         "fat":  8,
         "carb":  28,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-080.jpg",
         "id":  "food-080"
     },
@@ -762,7 +762,7 @@
         "protein":  5,
         "fat":  9,
         "carb":  29,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-081.jpg",
         "id":  "food-081"
     },
@@ -806,7 +806,7 @@
         "protein":  2.6,
         "fat":  0.7,
         "carb":  3.7,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-088.jpg",
         "id":  "food-088"
     },
@@ -817,7 +817,7 @@
         "protein":  1,
         "fat":  0.2,
         "carb":  12,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-092.jpg",
         "id":  "food-092"
     },
@@ -828,7 +828,7 @@
         "protein":  0.5,
         "fat":  0.1,
         "carb":  13,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-093.jpg",
         "id":  "food-093"
     },
@@ -839,7 +839,7 @@
         "protein":  0.8,
         "fat":  0.4,
         "carb":  15,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-094.jpg",
         "id":  "food-094"
     },
@@ -850,7 +850,7 @@
         "protein":  0.8,
         "fat":  0.2,
         "carb":  8,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-095.jpg",
         "id":  "food-095"
     },
@@ -861,7 +861,7 @@
         "protein":  0.6,
         "fat":  0.2,
         "carb":  17,
-        "category":  "fruit",
+        "category":  "",
         "image":  "img/food-096.jpg",
         "id":  "food-096"
     },
@@ -872,7 +872,7 @@
         "protein":  13,
         "fat":  2,
         "carb":  71,
-        "category":  "grain,pasta",
+        "category":  "",
         "image":  "img/food-101.jpg",
         "id":  "food-101"
     },
@@ -883,7 +883,7 @@
         "protein":  8,
         "fat":  2,
         "carb":  34,
-        "category":  "grain,rice",
+        "category":  "",
         "image":  "img/food-102.jpg",
         "id":  "food-102"
     },
@@ -894,7 +894,7 @@
         "protein":  9,
         "fat":  5,
         "carb":  65,
-        "category":  "grain",
+        "category":  "",
         "image":  "img/food-103.jpg",
         "id":  "food-103"
     },
@@ -905,7 +905,7 @@
         "protein":  28,
         "fat":  32,
         "carb":  3,
-        "category":  "dairy/eggs",
+        "category":  "dairy",
         "image":  "img/food-105.jpg",
         "id":  "food-105"
     },
@@ -916,7 +916,7 @@
         "protein":  11,
         "fat":  10,
         "carb":  3,
-        "category":  "dairy/eggs",
+        "category":  "dairy",
         "image":  "img/food-106.jpg",
         "id":  "food-106"
     },
@@ -927,7 +927,7 @@
         "protein":  20,
         "fat":  22,
         "carb":  2,
-        "category":  "dairy/eggs",
+        "category":  "dairy",
         "image":  "img/food-107.jpg",
         "id":  "food-107"
     },
@@ -938,7 +938,7 @@
         "protein":  25,
         "fat":  1.9,
         "carb":  14,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-108.jpg",
         "id":  "food-108"
     },
@@ -1004,7 +1004,7 @@
         "protein":  2.2,
         "fat":  0.2,
         "carb":  3.9,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-119.jpg",
         "id":  "food-119"
     },
@@ -1015,7 +1015,7 @@
         "protein":  1,
         "fat":  0.1,
         "carb":  7,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-123.jpg",
         "id":  "food-123"
     },
@@ -1026,7 +1026,7 @@
         "protein":  1,
         "fat":  0.2,
         "carb":  6,
-        "category":  "vegetable",
+        "category":  "",
         "image":  "img/food-124.jpg",
         "id":  "food-124"
     },
@@ -1037,7 +1037,7 @@
         "protein":  22,
         "fat":  22,
         "carb":  2,
-        "category":  "dairy/eggs",
+        "category":  "dairy",
         "image":  "img/food-147.jpg",
         "id":  "food-147"
     },
@@ -1048,20 +1048,9 @@
         "protein":  21,
         "fat":  0.8,
         "carb":  60,
-        "category":  "plant-based",
+        "category":  "",
         "image":  "img/food-155.jpg",
         "id":  "food-155"
-    },
-    {
-        "name_IT":  "Olio di oliva",
-        "name_EN":  "Olive oil",
-        "name_ES":  "Aceite de oliva",
-        "protein":  0,
-        "fat":  100,
-        "carb":  0,
-        "category":  "plant-based,olive-oil",
-        "image":  "img/food-156.jpg",
-        "id":  "food-156"
     },
     {
         "name_IT":  "Riso bianco",
@@ -1071,7 +1060,7 @@
         "fat":  0.9,
         "carb":  78,
 
-        "category":  "grain,rice",
+        "category":  "",
         "image":  "img/food-161.jpg",
         "id":  "food-161"
     },
@@ -1082,7 +1071,7 @@
         "protein":  13,
         "fat":  1.5,
         "carb":  75,
-        "category":  "grain,pasta",
+        "category":  "",
         "image":  "img/food-162.jpg",
         "id":  "food-162"
     },
@@ -1093,7 +1082,7 @@
         "protein":  8,
         "fat":  3,
         "carb":  50,
-        "category":  "grain",
+        "category":  "",
         "image":  "img/food-163.jpg",
         "id":  "food-163"
     },
@@ -1104,7 +1093,7 @@
         "protein":  4,
         "fat":  3.5,
         "carb":  5,
-        "category":  "dairy/eggs,sweets",
+        "category":  "dairy",
         "image":  "img/food-168.jpg",
         "id":  "food-168"
     },
@@ -1115,7 +1104,7 @@
         "protein":  3,
         "fat":  1.5,
         "carb":  3,
-        "category":  "plant-based,sweets",
+        "category":  "",
         "image":  "img/food-169.jpg",
         "id":  "food-169"
     },
@@ -1126,7 +1115,7 @@
         "protein":  0.5,
         "fat":  1.1,
         "carb":  2,
-        "category":  "plant-based,sweets",
+        "category":  "",
         "image":  "img/food-170.jpg",
         "id":  "food-170"
     },
@@ -1137,7 +1126,7 @@
         "protein":  5,
         "fat":  20,
         "carb":  55,
-        "category":  "junk,sweets",
+        "category":  "dairy",
         "image":  "img/food-175.jpg",
         "id":  "food-175"
     }

@@ -94,6 +94,9 @@ const applyLanguage = () => {
   }
 };
 
+const getSelectedDiet = () =>
+  document.querySelector('input[name="diet"]:checked')?.value || "omnivore";
+
 const updateFiltersBadge = () => {
   const badge = document.querySelector("#filters-badge");
   if (!badge) return;
@@ -101,10 +104,8 @@ const updateFiltersBadge = () => {
     badge.hidden = true;
     return;
   }
-  const isActive = ["#avoid-meat", "#avoid-fish", "#avoid-junk"].some(
-    (selector) => document.querySelector(selector)?.checked
-  );
-  badge.hidden = !isActive;
+  const diet = getSelectedDiet();
+  badge.hidden = diet === "omnivore";
 };
 
 const formatMacroLine = (label, value, className) =>
@@ -398,50 +399,57 @@ const prefilterFoods = (filters, target, limit = 12) => {
     .map(({ item }) => item);
 };
 
-const applyCategoryFilters = (items, filters) => {
-  if (!filters.avoidMeat && !filters.avoidFish && !filters.avoidJunk) {
-    return items;
+const getDietExclusions = (diet) => {
+  switch (diet) {
+    case "vegan":
+      return ["meat", "fish", "dairy", "eggs"];
+    case "vegetarian":
+      return ["meat", "fish"];
+    case "pescatarian":
+      return ["meat"];
+    default:
+      return [];
   }
+};
 
+const applyCategoryFilters = (items, filters) => {
+  const exclusions = getDietExclusions(filters.diet);
+  if (!exclusions.length) return items;
   return items.filter((item) => {
-    const categories = getCategories(item.category);
-    if (filters.avoidMeat && categories.includes("meat")) return false;
-    if (filters.avoidFish && categories.includes("fish")) return false;
-    if (filters.avoidJunk && categories.includes("junk")) return false;
-    return true;
+    const categories = getDietCategories(item.category);
+    return !categories.some((cat) => exclusions.includes(cat));
   });
 };
 
 const comboPassesFilters = (combo, filters) => {
-  if (!filters.avoidMeat && !filters.avoidFish && !filters.avoidJunk) {
-    return true;
-  }
+  const exclusions = getDietExclusions(filters.diet);
+  if (!exclusions.length) return true;
   return combo.items.every((item) => {
-    const categories = getCategories(item.category);
-    if (filters.avoidMeat && categories.includes("meat")) return false;
-    if (filters.avoidFish && categories.includes("fish")) return false;
-    if (filters.avoidJunk && categories.includes("junk")) return false;
-    return true;
+    const categories = getDietCategories(item.category);
+    return !categories.some((cat) => exclusions.includes(cat));
   });
 };
 
 const roundToStep = (value, step) => Math.round(value / step) * step;
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-const getCategories = (category) =>
-  (category || "")
+const getDietCategories = (category) => {
+  const raw = (category || "")
     .split(",")
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
-const hasCategory = (item, category) =>
-  getCategories(item.category).includes(category);
-const isOliveOilItem = (item) => {
-  const name = (item.nameIT || item.name_IT || "").toLowerCase();
-  return (
-    hasCategory(item, "olive-oil") ||
-    name.includes("olio di oliva") ||
-    name.includes("olio d'oliva")
-  );
+  const normalized = new Set();
+  raw.forEach((cat) => {
+    if (cat.includes("meat")) normalized.add("meat");
+    if (cat.includes("fish")) normalized.add("fish");
+    if (cat.includes("dairy")) normalized.add("dairy");
+    if (cat.includes("egg")) normalized.add("eggs");
+  });
+  return [...normalized];
 };
+  const isOliveOilItem = (item) => {
+    const name = (item.nameIT || item.name_IT || "").toLowerCase();
+    return name.includes("olio di oliva") || name.includes("olio d'oliva");
+  };
 const getUniqueWeight = (item) => {
   if (item.unique_weight === undefined || item.unique_weight === null) return null;
   const value = Number(item.unique_weight);
@@ -647,9 +655,7 @@ form.addEventListener("submit", (event) => {
   });
   hasMatchedOnce = true;
   const filters = {
-    avoidMeat: document.querySelector("#avoid-meat")?.checked ?? false,
-    avoidFish: document.querySelector("#avoid-fish")?.checked ?? false,
-    avoidJunk: document.querySelector("#avoid-junk")?.checked ?? false,
+    diet: getSelectedDiet(),
   };
   updateFiltersBadge();
 

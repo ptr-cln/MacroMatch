@@ -89,19 +89,23 @@
             </label>
           </div>
           <p class="hint" id="hint-text">Seleziona un solo macro alla volta (proteine, carboidrati o grassi).</p>
-          <div class="flag-row">
-              <label class="flag">
-                <input type="checkbox" id="avoid-meat" />
-                <span data-i18n="flag_meat">Evita Carne</span>
-              </label>
-              <label class="flag">
-                <input type="checkbox" id="avoid-fish" />
-                <span data-i18n="flag_fish">Evita Pesce</span>
-              </label>
-              <label class="flag">
-                <input type="checkbox" id="avoid-junk" />
-                <span data-i18n="flag_junk">Evita Junk Food</span>
-              </label>
+          <div class="diet-row" role="radiogroup" aria-label="Diet">
+            <label class="diet-option">
+              <input type="radio" name="diet" value="omnivore" checked />
+              <span data-i18n="diet_omnivore">Onnivoro</span>
+            </label>
+            <label class="diet-option">
+              <input type="radio" name="diet" value="vegetarian" />
+              <span data-i18n="diet_vegetarian">Vegetariano</span>
+            </label>
+            <label class="diet-option">
+              <input type="radio" name="diet" value="vegan" />
+              <span data-i18n="diet_vegan">Vegano</span>
+            </label>
+            <label class="diet-option">
+              <input type="radio" name="diet" value="pescatarian" />
+              <span data-i18n="diet_pescatarian">Pescetariano</span>
+            </label>
           </div>
           <button type="submit" id="match-button">Matcha alimenti</button>
         </form>
