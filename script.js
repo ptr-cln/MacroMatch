@@ -128,24 +128,7 @@ const comboRotationState = {
 
 const getRotatedCombos = (combos, count) => {
   if (!combos.length) return [];
-  if (combos.length <= count) return combos;
-  const signature = combos
-    .map((combo) => comboSignature(combo))
-    .sort()
-    .join("::");
-  if (signature !== comboRotationState.signature) {
-    comboRotationState.signature = signature;
-    comboRotationState.pool = shuffleArray(combos);
-    comboRotationState.index = 0;
-  }
-  const pool = comboRotationState.pool;
-  const start = comboRotationState.index;
-  const selected = [];
-  for (let i = 0; i < count; i += 1) {
-    selected.push(pool[(start + i) % pool.length]);
-  }
-  comboRotationState.index = (start + count) % pool.length;
-  return selected;
+  return combos.slice(0, count);
 };
 
 
@@ -308,7 +291,7 @@ const renderCombos = (combos, options = {}) => {
   const visibleCombos =
     preserveSelection && lastVisibleCombos.length
       ? lastVisibleCombos
-      : getRotatedCombos(combos, MAX_VISIBLE_RESULTS);
+      : combos.slice(0, MAX_VISIBLE_RESULTS);
   const total = visibleCombos.length;
   if (!preserveSelection) {
     lastResultsType = "combos";
@@ -341,15 +324,10 @@ const renderCombos = (combos, options = {}) => {
     } else {
       const shouldShowGhost = combos.length > MAX_VISIBLE_RESULTS;
       if (shouldShowGhost) {
-        let ghostCombo = preserveSelection ? lastGhostCombo : null;
-        if (!ghostCombo) {
-          const pool = comboRotationState.pool.length
-            ? comboRotationState.pool
-            : combos;
-          ghostCombo =
-            pool[comboRotationState.index % pool.length] ||
-            combos[MAX_VISIBLE_RESULTS];
-        }
+        const ghostCombo =
+          preserveSelection && lastGhostCombo
+            ? lastGhostCombo
+            : combos[MAX_VISIBLE_RESULTS];
         if (!preserveSelection) {
           lastGhostCombo = ghostCombo;
         }
@@ -426,6 +404,19 @@ const applyCategoryFilters = (items, filters) => {
   }
 
   return items.filter((item) => {
+    const categories = getCategories(item.category);
+    if (filters.avoidMeat && categories.includes("meat")) return false;
+    if (filters.avoidFish && categories.includes("fish")) return false;
+    if (filters.avoidJunk && categories.includes("junk")) return false;
+    return true;
+  });
+};
+
+const comboPassesFilters = (combo, filters) => {
+  if (!filters.avoidMeat && !filters.avoidFish && !filters.avoidJunk) {
+    return true;
+  }
+  return combo.items.every((item) => {
     const categories = getCategories(item.category);
     if (filters.avoidMeat && categories.includes("meat")) return false;
     if (filters.avoidFish && categories.includes("fish")) return false;
@@ -685,7 +676,8 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  const combos = buildMacroCombos(target, filters);
+  const rawCombos = buildMacroCombos(target, filters);
+  const combos = rawCombos.filter((combo) => comboPassesFilters(combo, filters));
   if (combos.length) {
     renderCombos(combos);
     return;
