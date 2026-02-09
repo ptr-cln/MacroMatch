@@ -166,11 +166,11 @@ body {
 }
 
 .diet-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 18px;
-  justify-content: center;
-}
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    justify-content: center;
+  }
 
 .diet-option {
   display: inline-flex;
@@ -209,9 +209,23 @@ body {
 }
 
 .diet-option input:checked + span::before {
-  border-color: rgba(126, 27, 36, 0.9);
-  background: radial-gradient(circle, #c73b3b 45%, #fff 48%);
-}
+    border-color: rgba(126, 27, 36, 0.9);
+    background: radial-gradient(circle, #c73b3b 45%, #fff 48%);
+  }
+
+  @media (max-width: 600px) {
+    .diet-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 12px;
+      justify-items: stretch;
+    }
+
+    .diet-option {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 
 
 
