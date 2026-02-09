@@ -53,6 +53,16 @@
   </head>
   <body>
     <div class="page">
+      <nav class="topbar" aria-label="Primary">
+        <a class="topbar__link" href="#macro" data-i18n="nav_home">Home</a>
+        <div class="lang-select lang-select--topbar">
+          <select id="lang">
+            <option value="it">Italiano</option>
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </nav>
       <header class="hero">
         <div class="hero__content">
           <div class="hero__top">
@@ -60,17 +70,9 @@
           </div>
           <h1 data-i18n="hero_title">Trova alimenti in base ai tuoi macronutrienti</h1>
         </div>
-        <div class="lang-select lang-select--hero">
-          <label for="lang" data-i18n="lang_label">Lingua</label>
-          <select id="lang">
-            <option value="it">Italiano</option>
-            <option value="es">Español</option>
-            <option value="en">English</option>
-          </select>
-        </div>
       </header>
 
-      <section class="macro-panel card">
+      <section class="macro-panel card" id="macro">
         <form id="macro-form">
           <div class="macro-row">
             <label>

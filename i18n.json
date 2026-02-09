@@ -1,6 +1,7 @@
 ﻿{
   "it": {
     "lang_label": "Lingua",
+    "nav_home": "Home",
     "hero_title": "Trova alimenti in base ai tuoi macronutrienti",
     "label_protein": "Proteine (g)",
     "label_carb": "Carboidrati (g)",
@@ -44,6 +45,7 @@
   },
   "en": {
     "lang_label": "Language",
+    "nav_home": "Home",
     "hero_title": "Find foods by your macronutrients",
     "label_protein": "Protein (g)",
     "label_carb": "Carbohydrates (g)",
@@ -87,6 +89,7 @@
   },
   "es": {
     "lang_label": "Idioma",
+    "nav_home": "Inicio",
     "hero_title": "Encuentra alimentos según tus macronutrientes",
     "label_protein": "Proteínas (g)",
     "label_carb": "Carbohidratos (g)",

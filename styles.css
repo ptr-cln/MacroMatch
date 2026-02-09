@@ -37,7 +37,7 @@ body {
 .hero {
   border-radius: 32px;
   background: linear-gradient(140deg, rgba(199, 59, 59, 0.96), rgba(126, 27, 36, 0.95));
-  padding: 36px 32px;
+  padding: 24px 32px;
   color: #fff;
   box-shadow: var(--shadow);
   position: relative;
@@ -48,6 +48,41 @@ body {
   gap: 16px;
   width: 100%;
   margin-inline: auto;
+}
+
+.topbar {
+  border-radius: 28px;
+  background: linear-gradient(140deg, rgba(199, 59, 59, 0.96), rgba(126, 27, 36, 0.95));
+  padding: 14px 24px;
+  color: #fff;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.topbar__link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  font-size: 0.95rem;
+}
+
+.topbar__link:hover {
+  opacity: 0.9;
+}
+
+.lang-select--topbar select {
+  background: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
+  color: #7e1b24;
+  box-shadow: 0 8px 18px rgba(74, 15, 19, 0.2);
+  appearance: none;
 }
 
 .hero__content {
@@ -108,7 +143,7 @@ body {
 }
 
 .eyebrow {
-  font-size: 0.85rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.25em;
   opacity: 0.8;
@@ -615,6 +650,11 @@ button:hover {
 }
 
 @media (max-width: 800px) {
+  .topbar {
+    padding: 12px 20px;
+    border-radius: 24px;
+  }
+
   .macro-row {
     grid-template-columns: 1fr;
   }
@@ -625,7 +665,7 @@ button:hover {
   }
 
   .hero {
-    padding: 28px;
+    padding: 14px 20px;
     grid-template-columns: 1fr;
     grid-template-areas: "lang" "content";
   }
