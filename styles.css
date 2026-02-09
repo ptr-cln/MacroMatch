@@ -343,43 +343,20 @@ button:hover {
   justify-items: stretch;
 }
 
-.results-warning {
-  font-size: 1.02rem;
-  font-weight: 700;
-  color: #7e1b24;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.95), rgba(255, 236, 232, 0.95));
-  border: 1px solid rgba(199, 59, 59, 0.35);
-  box-shadow: 0 10px 20px rgba(199, 59, 59, 0.15);
-  padding: 14px 16px;
-  border-radius: 12px;
-  text-align: center;
-}
-
 .beta-section {
   display: grid;
   gap: 12px;
 }
 
-.beta-feedback {
+.beta-copy {
   display: grid;
-  gap: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  gap: 8px;
+  color: #5f4a4a;
 }
 
-.beta-feedback textarea {
-  border: 1px solid rgba(126, 27, 36, 0.25);
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  background: #fff;
-  resize: vertical;
-  min-height: 90px;
-}
-
-.beta-feedback textarea:focus {
-  outline: 2px solid var(--red-500);
+.beta-note {
+  font-size: 0.82rem;
+  color: #8a6d6d;
 }
 
 .beta-actions {
@@ -387,10 +364,6 @@ button:hover {
   grid-template-columns: 1fr auto;
   gap: 12px;
   align-items: center;
-}
-
-.beta-actions .beta-feedback {
-  grid-column: 1 / -1;
 }
 
 .beta-error {
@@ -437,7 +410,7 @@ button:hover {
   justify-self: center;
 }
 
-.beta-signup input {
+.beta-actions input {
   border: 1px solid rgba(126, 27, 36, 0.25);
   padding: 10px 14px;
   border-radius: 12px;
@@ -448,6 +421,16 @@ button:hover {
 .beta-actions button {
   padding: 10px 18px;
   border-radius: 12px;
+}
+
+@media (max-width: 520px) {
+  .beta-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .beta-actions button {
+    width: 100%;
+  }
 }
 
 #beta-submit.is-loading {

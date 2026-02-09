@@ -70,8 +70,6 @@ const applyLanguage = () => {
   if (fatInput) fatInput.placeholder = placeholders.fat;
   const betaEmail = document.querySelector("#beta-email");
   if (betaEmail) betaEmail.placeholder = t("placeholder_email");
-  const betaMessage = document.querySelector("#beta-message");
-  if (betaMessage) betaMessage.placeholder = t("placeholder_feedback");
 
   const resultsTitle = document.querySelector("#results-title");
   if (resultsTitle) resultsTitle.textContent = t("results_title");
@@ -150,21 +148,48 @@ const renderEmpty = (key) => {
   lastMatches = [];
 };
 
-const ensureBetaNotice = (shouldShow) => {
-  const existing = document.querySelector("#beta-results-note");
+const createBetaCta = () => {
+  const section = document.createElement("div");
+  section.id = "beta-cta";
+  section.className = "card beta-section";
+  section.innerHTML = `
+    <div class="combo-card__header">
+      <h3 data-i18n="beta_cta_title">Vuoi più risultati come questi?</h3>
+    </div>
+    <div class="beta-copy">
+      <p data-i18n="beta_cta_line1">
+        Macro Match è in beta e mostra solo poche opzioni.
+      </p>
+      <p data-i18n="beta_cta_line2">
+        Sto aggiungendo molti più alimenti, filtri e combinazioni.
+      </p>
+      <p data-i18n="beta_cta_line3">
+        Lascia la tua email per essere avvisato quando il tool migliora e accedere prima alla versione completa
+      </p>
+    </div>
+    <form id="beta-form" class="beta-actions" novalidate>
+      <input type="email" id="beta-email" placeholder="email@example.com" />
+      <button type="submit" id="beta-submit" data-i18n="beta_submit">Tienimi aggiornato</button>
+    </form>
+    <p class="beta-note" data-i18n="beta_note">
+      Nessuno spam. Una mail solo quando c’è qualcosa di nuovo.
+    </p>
+    <p id="beta-error" class="beta-error" aria-live="polite"></p>
+  `;
+  return section;
+};
+
+const ensureBetaCta = (shouldShow) => {
+  const existing = document.querySelector("#beta-cta");
   if (!shouldShow) {
     if (existing) existing.remove();
     return;
   }
-  if (existing) {
-    existing.textContent = t("beta_results_notice");
-    return;
-  }
-  const note = document.createElement("div");
-  note.id = "beta-results-note";
-  note.className = "results-warning";
-  note.textContent = t("beta_results_notice");
-  resultsGrid.appendChild(note);
+  if (existing) return;
+  const cta = createBetaCta();
+  resultsGrid.appendChild(cta);
+  applyLanguage();
+  bindBetaForm();
 };
 
 const createComboCard = (combo, comboIndex, options = {}) => {
@@ -222,9 +247,9 @@ const ensureGhostOption = (combo, indexLabel) => {
     existing.replaceWith(card);
     return;
   }
-  const betaNote = document.querySelector("#beta-results-note");
-  if (betaNote && betaNote.parentElement === resultsGrid) {
-    resultsGrid.insertBefore(card, betaNote);
+  const betaCta = document.querySelector("#beta-cta");
+  if (betaCta && betaCta.parentElement === resultsGrid) {
+    resultsGrid.insertBefore(card, betaCta);
   } else {
     resultsGrid.appendChild(card);
   }
@@ -242,15 +267,11 @@ const renderStoredResults = () => {
   if (lastResultsType === "empty" && lastEmptyKey) {
     renderEmpty(lastEmptyKey);
     resultsCount.textContent = "";
-    const betaSection = document.querySelector("#beta-section");
-    if (betaSection) betaSection.hidden = false;
   }
 };
 
 const renderMatches = (items) => {
   resultsGrid.innerHTML = "";
-  const betaSection = document.querySelector("#beta-section");
-  if (betaSection) betaSection.hidden = false;
 
   if (!items.length) {
     renderEmpty("empty_no_combos");
@@ -283,12 +304,10 @@ const renderMatches = (items) => {
 const renderCombos = (combos, options = {}) => {
   const { preserveSelection = false } = options;
   resultsGrid.innerHTML = "";
-  const betaSection = document.querySelector("#beta-section");
 
   if (!combos.length) {
     renderEmpty("empty_no_combos");
     resultsCount.textContent = "";
-    if (betaSection) betaSection.hidden = false;
     return;
   }
 
@@ -340,8 +359,7 @@ const renderCombos = (combos, options = {}) => {
         lastGhostCombo = null;
         ensureGhostOption(null, MAX_VISIBLE_RESULTS + 1);
       }
-      ensureBetaNotice(total === 3);
-      if (betaSection) betaSection.hidden = false;
+      ensureBetaCta(total === 3);
     }
   };
 
@@ -665,8 +683,6 @@ form.addEventListener("submit", (event) => {
   if (!foods.length) {
     renderEmpty("error_db");
     resultsCount.textContent = "";
-    const betaSection = document.querySelector("#beta-section");
-    if (betaSection) betaSection.hidden = false;
     return;
   }
 
@@ -680,8 +696,6 @@ form.addEventListener("submit", (event) => {
   if (!hasAnyMacro) {
     renderEmpty("empty_no_macro");
     resultsCount.textContent = "";
-    const betaSection = document.querySelector("#beta-section");
-    if (betaSection) betaSection.hidden = false;
     return;
   }
 
@@ -694,8 +708,6 @@ form.addEventListener("submit", (event) => {
 
   renderEmpty("empty_no_combos");
   resultsCount.textContent = "";
-  const betaSection = document.querySelector("#beta-section");
-  if (betaSection) betaSection.hidden = false;
 });
 
 fetch("data.json")
@@ -754,14 +766,85 @@ document.querySelectorAll('input[name="diet"]').forEach((input) => {
   });
 });
 
-const betaForm = document.querySelector("#beta-form");
-const betaEmailInput = document.querySelector("#beta-email");
-const betaMessageInput = document.querySelector("#beta-message");
-const betaError = document.querySelector("#beta-error");
+let betaForm;
+let betaEmailInput;
+let betaError;
+let betaSubmit;
 const betaModal = document.querySelector("#beta-modal");
 const betaClose = document.querySelector("#beta-close");
-const betaSubmit = document.querySelector("#beta-submit");
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const bindBetaForm = () => {
+  betaForm = document.querySelector("#beta-form");
+  betaEmailInput = document.querySelector("#beta-email");
+  betaError = document.querySelector("#beta-error");
+  betaSubmit = document.querySelector("#beta-submit");
+
+  if (!betaForm || !betaEmailInput || !betaSubmit) return;
+  if (betaForm.dataset.bound === "true") return;
+  betaForm.dataset.bound = "true";
+
+  syncBetaButtonState();
+  betaEmailInput.addEventListener("input", () => {
+    validateBetaEmail();
+    syncBetaButtonState();
+  });
+  betaEmailInput.addEventListener("blur", () => {
+    validateBetaEmail();
+    syncBetaButtonState();
+  });
+  betaForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!validateBetaEmail()) {
+      trackEvent("beta_email_invalid", { event_category: "engagement" });
+      return;
+    }
+
+    const email = betaEmailInput.value.trim();
+    trackEvent("beta_email_submit", { event_category: "engagement" });
+    if (betaSubmit) {
+      betaSubmit.disabled = true;
+      betaSubmit.classList.add("is-loading");
+      betaSubmit.textContent = t("beta_sending");
+    }
+    betaEmailInput.disabled = true;
+
+    const payload = new FormData();
+    payload.append("email", email);
+    payload.append(
+      "message",
+      `Email: ${email}\nDate: ${new Date().toLocaleString()}`
+    );
+    payload.append("_subject", "MacroMatch Beta Signup");
+    payload.append("_captcha", "false");
+
+    fetch("https://formsubmit.co/ajax/macromatchtool@gmail.com", {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: payload,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("submit_failed");
+        betaEmailInput.value = "";
+        openBetaModal();
+        trackEvent("beta_email_success", { event_category: "engagement" });
+      })
+      .catch(() => {
+        setBetaError("beta_error");
+        trackEvent("beta_email_error", { event_category: "engagement" });
+      })
+      .finally(() => {
+        betaEmailInput.disabled = false;
+        if (betaSubmit) {
+          betaSubmit.disabled = false;
+          betaSubmit.classList.remove("is-loading");
+          betaSubmit.textContent = t("beta_submit");
+        }
+        betaEmailInput.classList.remove("is-invalid");
+        syncBetaButtonState();
+      });
+  });
+};
 
 const setBetaError = (key) => {
   if (!betaError) return;
@@ -819,75 +902,5 @@ if (betaClose) {
 if (betaModal) {
   betaModal.addEventListener("click", (event) => {
     if (event.target === betaModal) closeBetaModal();
-  });
-}
-
-if (betaForm && betaEmailInput) {
-  syncBetaButtonState();
-  betaEmailInput.addEventListener("input", () => {
-    validateBetaEmail();
-    syncBetaButtonState();
-  });
-  betaEmailInput.addEventListener("blur", () => {
-    validateBetaEmail();
-    syncBetaButtonState();
-  });
-  betaForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!validateBetaEmail()) {
-      trackEvent("beta_email_invalid", { event_category: "engagement" });
-      return;
-    }
-
-    const email = betaEmailInput.value.trim();
-    trackEvent("beta_email_submit", { event_category: "engagement" });
-    if (betaSubmit) {
-      betaSubmit.disabled = true;
-      betaSubmit.classList.add("is-loading");
-      betaSubmit.textContent = t("beta_sending");
-    }
-    betaEmailInput.disabled = true;
-    if (betaMessageInput) betaMessageInput.disabled = true;
-
-    const feedback = betaMessageInput ? betaMessageInput.value.trim() : "";
-
-    const payload = new FormData();
-    payload.append("email", email);
-    payload.append(
-      "message",
-      `Email: ${email}\nDate: ${new Date().toLocaleString()}\nFeedback: ${
-        feedback || "-"
-      }`
-    );
-    payload.append("_subject", "MacroMatch Beta Signup");
-    payload.append("_captcha", "false");
-
-    fetch("https://formsubmit.co/ajax/macromatchtool@gmail.com", {
-      method: "POST",
-      headers: { Accept: "application/json" },
-      body: payload,
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("submit_failed");
-        betaEmailInput.value = "";
-        if (betaMessageInput) betaMessageInput.value = "";
-        openBetaModal();
-        trackEvent("beta_email_success", { event_category: "engagement" });
-      })
-      .catch(() => {
-        setBetaError("beta_error");
-        trackEvent("beta_email_error", { event_category: "engagement" });
-      })
-      .finally(() => {
-        betaEmailInput.disabled = false;
-        if (betaMessageInput) betaMessageInput.disabled = false;
-        if (betaSubmit) {
-          betaSubmit.disabled = false;
-          betaSubmit.classList.remove("is-loading");
-          betaSubmit.textContent = t("beta_submit");
-        }
-        betaEmailInput.classList.remove("is-invalid");
-        syncBetaButtonState();
-      });
   });
 }
