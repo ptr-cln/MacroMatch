@@ -18,10 +18,10 @@
    - step di 20g
    - minimo 30g
    - massimo 500g
-   - se `unique_weight` e` presente, la grammatura e` forzata su quel valore
+   - se `unique_weight` è presente, la grammatura è forzata su quel valore
 3. Range di tolleranza sui macro:
-   - se un target e` **<= 10g**, la tolleranza e` **10g**
-   - se un target e` **> 10g**, la tolleranza e` **20%**
+   - se un target e `**<= 10g**, la tolleranza e` **10g**
+   - se un target e `**> 10g**, la tolleranza e` **20%**
 4. Calorie stimate:
    - Proteine: 4 kcal/g
    - Carboidrati: 4 kcal/g
@@ -48,13 +48,13 @@ Le categorie dietetiche gestite dall'app sono **solo**:
 - `dairy`
 - `eggs`
 
-Se nel JSON appare `dairy/eggs`, viene trattato come **dairy + eggs**.
+Le categorie vanno separate da virgola, ad esempio: `dairy,eggs`.
 
 ---
 
 ## Multilingua
 Il sito supporta italiano, inglese e spagnolo. Le stringhe sono in `i18n.json`.
-La lingua di default viene rilevata dal browser, ma puo` essere cambiata dal menu in alto.
+La lingua di default viene rilevata dal browser, ma può essere cambiata dal menu in alto.
 
 ---
 
@@ -79,5 +79,4 @@ Risultato: alimenti con proteine vicine a 30g e grassi/carbo molto bassi.
 
 ---
 
-Se vuoi estendere il dataset o cambiare la logica, la maggior parte delle regole e` in `script.js` nella funzione `buildMacroCombos`.
-
+Se vuoi estendere il dataset o cambiare la logica, la maggior parte delle regole è in `script.js` nella funzione `buildMacroCombos`.
