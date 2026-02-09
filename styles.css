@@ -420,6 +420,32 @@ button:hover {
   width: 100%;
 }
 
+.combo-card--ghost {
+  position: relative;
+  opacity: 0.65;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.combo-card--ghost::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 42%;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 45%,
+    rgba(255, 255, 255, 0.96) 100%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
 .combo-divider {
   height: 2px;
   background: repeating-linear-gradient(

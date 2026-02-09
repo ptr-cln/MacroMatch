@@ -11,6 +11,7 @@ let lastVisibleCombos = [];
 let lastMatches = [];
 let lastEmptyKey = null;
 let hasMatchedOnce = false;
+let lastGhostCombo = null;
 
 let translations = {};
 let currentLang = "en";
@@ -179,6 +180,69 @@ const ensureBetaNotice = (shouldShow) => {
   resultsGrid.appendChild(note);
 };
 
+const createComboCard = (combo, comboIndex, options = {}) => {
+  const { ghost = false } = options;
+  const card = document.createElement("article");
+  card.className = `combo-card${ghost ? " combo-card--ghost" : ""}`;
+  if (ghost) {
+    card.id = "ghost-option";
+    card.setAttribute("aria-hidden", "true");
+  }
+  card.innerHTML = `
+    <div class="combo-card__header">
+      <h3>${t("combination_label")} ${comboIndex}</h3>
+    </div>
+    <div class="combo-divider" aria-hidden="true"></div>
+    <ul class="combo-list">
+      ${combo.items
+        .map((item) => {
+          const displayName = getComboItemName(item);
+          const protein = ((item.proteinPer100 * item.grams) / 100).toFixed(1);
+          const fat = ((item.fatPer100 * item.grams) / 100).toFixed(1);
+          const carb = ((item.carbPer100 * item.grams) / 100).toFixed(1);
+          const kcal = calcKcal(Number(protein), Number(fat), Number(carb)).toFixed(0);
+          return `
+            <li class="combo-item">
+              <div class="combo-item__media">
+                <img src="${item.image}" alt="${displayName}" />
+              </div>
+              <div>
+                <div class="combo-item__title">${displayName}</div>
+                <div class="combo-item__meta"><strong>${item.grams}g · ${t("kcal_label")} ${kcal}</strong></div>
+                <div class="macro-line">
+                  ${formatMacroLine(t("macro_protein"), protein, "macro--protein")}
+                  ${formatMacroLine(t("macro_fat"), fat, "macro--fat")}
+                  ${formatMacroLine(t("macro_carb"), carb, "macro--carb")}
+                </div>
+              </div>
+            </li>
+          `;
+        })
+        .join("")}
+    </ul>
+  `;
+  return card;
+};
+
+const ensureGhostOption = (combo, indexLabel) => {
+  const existing = document.querySelector("#ghost-option");
+  if (!combo) {
+    if (existing) existing.remove();
+    return;
+  }
+  const card = createComboCard(combo, indexLabel, { ghost: true });
+  if (existing) {
+    existing.replaceWith(card);
+    return;
+  }
+  const betaNote = document.querySelector("#beta-results-note");
+  if (betaNote && betaNote.parentElement === resultsGrid) {
+    resultsGrid.insertBefore(card, betaNote);
+  } else {
+    resultsGrid.appendChild(card);
+  }
+};
+
 const renderStoredResults = () => {
   if (lastResultsType === "combos" && lastVisibleCombos.length) {
     renderCombos(lastVisibleCombos, { preserveSelection: true });
@@ -259,42 +323,8 @@ const renderCombos = (combos, options = {}) => {
   const renderChunk = () => {
     const slice = visibleCombos.slice(rendered, rendered + chunkSize);
     slice.forEach((combo, index) => {
-      const card = document.createElement("article");
-      card.className = "combo-card";
       const comboIndex = rendered + index + 1;
-      card.innerHTML = `
-        <div class="combo-card__header">
-          <h3>${t("combination_label")} ${comboIndex}</h3>
-        </div>
-        <div class="combo-divider" aria-hidden="true"></div>
-        <ul class="combo-list">
-          ${combo.items
-            .map((item) => {
-              const displayName = getComboItemName(item);
-              const protein = ((item.proteinPer100 * item.grams) / 100).toFixed(1);
-              const fat = ((item.fatPer100 * item.grams) / 100).toFixed(1);
-              const carb = ((item.carbPer100 * item.grams) / 100).toFixed(1);
-              const kcal = calcKcal(Number(protein), Number(fat), Number(carb)).toFixed(0);
-              return `
-                <li class="combo-item">
-                  <div class="combo-item__media">
-                    <img src="${item.image}" alt="${displayName}" />
-                  </div>
-                  <div>
-                    <div class="combo-item__title">${displayName}</div>
-                    <div class="combo-item__meta"><strong>${item.grams}g · ${t("kcal_label")} ${kcal}</strong></div>
-                    <div class="macro-line">
-                      ${formatMacroLine(t("macro_protein"), protein, "macro--protein")}
-                      ${formatMacroLine(t("macro_fat"), fat, "macro--fat")}
-                      ${formatMacroLine(t("macro_carb"), carb, "macro--carb")}
-                    </div>
-                  </div>
-                </li>
-              `;
-            })
-            .join("")}
-        </ul>
-      `;
+      const card = createComboCard(combo, comboIndex);
       resultsGrid.appendChild(card);
     });
 
@@ -307,6 +337,25 @@ const renderCombos = (combos, options = {}) => {
     if (rendered < total) {
       setTimeout(renderChunk, 0);
     } else {
+      const shouldShowGhost = combos.length > MAX_VISIBLE_RESULTS;
+      if (shouldShowGhost) {
+        let ghostCombo = preserveSelection ? lastGhostCombo : null;
+        if (!ghostCombo) {
+          const pool = comboRotationState.pool.length
+            ? comboRotationState.pool
+            : combos;
+          ghostCombo =
+            pool[comboRotationState.index % pool.length] ||
+            combos[MAX_VISIBLE_RESULTS];
+        }
+        if (!preserveSelection) {
+          lastGhostCombo = ghostCombo;
+        }
+        ensureGhostOption(ghostCombo, MAX_VISIBLE_RESULTS + 1);
+      } else {
+        lastGhostCombo = null;
+        ensureGhostOption(null, MAX_VISIBLE_RESULTS + 1);
+      }
       ensureBetaNotice(total === 3);
       if (betaSection) betaSection.hidden = false;
     }
