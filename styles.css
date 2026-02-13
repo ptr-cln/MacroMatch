@@ -137,12 +137,12 @@ h3,
 
 .lang-trigger {
   background: #0f1419;
-  border: 1px solid rgba(152, 255, 61, 0.4);
+  border: 1px solid rgba(122, 140, 155, 0.45);
   border-radius: 999px;
   padding: 8px 16px;
   font-weight: 600;
   color: #98ff3d;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -155,9 +155,9 @@ h3,
   top: calc(100% + 8px);
   min-width: 160px;
   background: #0f1419;
-  border: 1px solid rgba(152, 255, 61, 0.25);
+  border: 1px solid rgba(122, 140, 155, 0.3);
   border-radius: 14px;
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35);
   padding: 6px;
   display: none;
   z-index: 20;
@@ -181,7 +181,7 @@ h3,
 
 .lang-option:hover,
 .lang-option[aria-selected="true"] {
-  background: rgba(152, 255, 61, 0.12);
+  background: rgba(152, 255, 61, 0.08);
   color: #98ff3d;
 }
 
