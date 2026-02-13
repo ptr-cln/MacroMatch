@@ -92,6 +92,68 @@ const applyLanguage = () => {
   }
 };
 
+const setupLangMenu = () => {
+  const langSelect = document.querySelector("#lang");
+  const langWrapper = document.querySelector(".lang-select--custom");
+  if (!langSelect || !langWrapper) return;
+  if (langWrapper.dataset.bound === "true") return;
+  langWrapper.dataset.bound = "true";
+
+  const trigger = langWrapper.querySelector(".lang-trigger");
+  const menu = langWrapper.querySelector(".lang-menu");
+  const options = Array.from(langWrapper.querySelectorAll(".lang-option"));
+  if (!trigger || !menu || !options.length) return;
+
+  const sync = () => {
+    const selected = options.find((opt) => opt.dataset.lang === langSelect.value);
+    if (!selected) return;
+    trigger.textContent = selected.textContent;
+    options.forEach((opt) => {
+      opt.setAttribute("aria-selected", opt === selected ? "true" : "false");
+    });
+  };
+
+  const closeMenu = () => {
+    langWrapper.classList.remove("is-open");
+    trigger.setAttribute("aria-expanded", "false");
+  };
+
+  sync();
+
+  trigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const isOpen = langWrapper.classList.toggle("is-open");
+    trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+
+  options.forEach((option) => {
+    option.addEventListener("click", (event) => {
+      event.preventDefault();
+      const value = option.dataset.lang;
+      if (!value) return;
+      langSelect.value = value;
+      langSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      closeMenu();
+      sync();
+    });
+  });
+
+  langSelect.addEventListener("change", sync);
+
+  document.addEventListener("click", (event) => {
+    if (!langWrapper.contains(event.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMenu();
+    }
+  });
+};
+
 const getSelectedDiet = () =>
   document.querySelector('input[name="diet"]:checked')?.value || "omnivore";
 
@@ -744,11 +806,13 @@ const initI18n = () => {
       }
       document.documentElement.lang = currentLang;
       applyLanguage();
+      setupLangMenu();
     })
     .catch(() => {
       currentLang = getDefaultLang();
       document.documentElement.lang = currentLang;
       applyLanguage();
+      setupLangMenu();
     });
 };
 

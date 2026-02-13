@@ -55,8 +55,16 @@
     <div class="page">
       <nav class="topbar" aria-label="Primary">
         <a class="topbar__link" href="#macro" data-i18n="nav_home">Home</a>
-        <div class="lang-select lang-select--topbar">
-          <select id="lang">
+        <div class="lang-select lang-select--topbar lang-select--custom">
+          <button type="button" class="lang-trigger" id="lang-trigger" aria-haspopup="listbox" aria-expanded="false">
+            English
+          </button>
+          <div class="lang-menu" role="listbox" aria-label="Language">
+            <button type="button" class="lang-option" data-lang="it">Italiano</button>
+            <button type="button" class="lang-option" data-lang="es">Español</button>
+            <button type="button" class="lang-option" data-lang="en">English</button>
+          </div>
+          <select id="lang" aria-hidden="true" tabindex="-1">
             <option value="it">Italiano</option>
             <option value="es">Español</option>
             <option value="en">English</option>
