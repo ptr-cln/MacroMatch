@@ -153,26 +153,21 @@ const createBetaCta = () => {
   section.id = "beta-cta";
   section.className = "card beta-section";
   section.innerHTML = `
-    <div class="combo-card__header">
-      <h3 data-i18n="beta_cta_title">Vuoi più risultati come questi?</h3>
-    </div>
+    <h2 data-i18n="beta_cta_title">Built for people who lift</h2>
     <div class="beta-copy">
       <p data-i18n="beta_cta_line1">
-        Macro Match è in beta e mostra solo poche opzioni.
+        I’m improving Macro Match specifically for bodybuilders (bulk & cut).
       </p>
       <p data-i18n="beta_cta_line2">
-        Sto aggiungendo molti più alimenti, filtri e combinazioni.
-      </p>
-      <p data-i18n="beta_cta_line3">
-        Lascia la tua email per essere avvisato quando il tool migliora e accedere prima alla versione completa
+        If you track macros regularly and want early access to improvements, leave your email.
       </p>
     </div>
     <form id="beta-form" class="beta-actions" novalidate>
       <input type="email" id="beta-email" placeholder="email@example.com" />
-      <button type="submit" id="beta-submit" data-i18n="beta_submit">Tienimi aggiornato</button>
+      <button type="submit" id="beta-submit" data-i18n="beta_submit">Join the beta</button>
     </form>
     <p class="beta-note" data-i18n="beta_note">
-      Nessuno spam. Una mail solo quando c’è qualcosa di nuovo.
+      No spam. Just updates when the tool gets better.
     </p>
     <p id="beta-error" class="beta-error" aria-live="polite"></p>
   `;
@@ -181,6 +176,9 @@ const createBetaCta = () => {
 
 const ensureBetaCta = (shouldShow) => {
   const existing = document.querySelector("#beta-cta");
+  if (existing && existing.parentElement !== resultsGrid) {
+    return;
+  }
   if (!shouldShow) {
     if (existing) existing.remove();
     return;
@@ -904,3 +902,5 @@ if (betaModal) {
     if (event.target === betaModal) closeBetaModal();
   });
 }
+
+bindBetaForm();

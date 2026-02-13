@@ -9,7 +9,7 @@
       content="MacroMatch è un tool che suggerisce alimenti in base ai macronutrienti desiderati. Inserisci proteine, grassi o carboidrati e ottieni combinazioni coerenti."
     />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#c73b3b" />
+    <meta name="theme-color" content="#0b0f12" />
     <link rel="canonical" href="https://ptr-cln.github.io/MacroMatch/" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta property="og:title" content="MacroMatch | Trova alimenti per macronutrienti" />
@@ -68,11 +68,43 @@
           <div class="hero__top">
             <p class="eyebrow">MacroMatch</p>
           </div>
-          <h1 data-i18n="hero_title">Trova alimenti in base ai tuoi macronutrienti</h1>
+          <h1 data-i18n="hero_title">Built for bodybuilders who track macros</h1>
+          <p class="hero__lead" data-i18n="hero_subtitle">
+            Bulking or cutting? Find foods that fit your macros without overthinking your meals.
+          </p>
+          <p class="hero__micro" data-i18n="hero_micro">
+            No meal plans. No tracking. Just food that fits your numbers.
+          </p>
         </div>
       </header>
 
+      <section class="card section" id="problem">
+        <h2 class="section-title" data-i18n="problem_title">The problem</h2>
+        <div class="section-copy">
+          <p data-i18n="problem_line1">If you lift weights, you already know your macros.</p>
+          <p data-i18n="problem_line2">
+            The annoying part is deciding what to eat without doing math every time.
+          </p>
+          <p data-i18n="problem_line3">
+            You don’t need another diet app. You just need food ideas that hit your macros.
+          </p>
+        </div>
+      </section>
+
       <section class="macro-panel card" id="macro">
+        <div class="macro-intro">
+          <h2 class="section-title" data-i18n="tool_title">How it works</h2>
+          <p class="section-copy" data-i18n="tool_copy">
+            Enter your target protein, carbs and fats. Macro Match shows foods that fit — whether you’re in a bulk or a
+            cut.
+          </p>
+          <div class="use-case">
+            <span class="use-case__label" data-i18n="tool_use_case_label">Typical use case:</span>
+            <p class="use-case__quote" data-i18n="tool_use_case_quote">
+              “I need 50g of protein and 20g of fat. What can I eat right now?”
+            </p>
+          </div>
+        </div>
         <form id="macro-form">
           <div class="macro-row">
             <label>
@@ -128,6 +160,25 @@
         </div>
       </section>
 
+      <section class="card beta-section" id="beta-cta">
+        <h2 data-i18n="beta_cta_title">Built for people who lift</h2>
+        <div class="beta-copy">
+          <p data-i18n="beta_cta_line1">I’m improving Macro Match specifically for bodybuilders (bulk &amp; cut).</p>
+          <p data-i18n="beta_cta_line2">
+            If you track macros regularly and want early access to improvements, leave your email.
+          </p>
+        </div>
+        <form id="beta-form" class="beta-actions" novalidate>
+          <input type="email" id="beta-email" placeholder="email@example.com" />
+          <button type="submit" id="beta-submit" data-i18n="beta_submit">Join the beta</button>
+        </form>
+        <p class="beta-note" data-i18n="beta_note">No spam. Just updates when the tool gets better.</p>
+        <p id="beta-error" class="beta-error" aria-live="polite"></p>
+      </section>
+
+      <footer class="footer">
+        <p data-i18n="footer_note">Early beta — feedback welcome</p>
+      </footer>
     </div>
 
     <div id="beta-modal" class="modal" hidden>
