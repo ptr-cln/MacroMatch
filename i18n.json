@@ -49,9 +49,9 @@
     "beta_invalid_email": "Inserisci un'email valida.",
     "beta_error": "Errore durante l'invio. Riprova.",
     "footer_note": "Beta iniziale — feedback benvenuti",
-    "placeholder_protein": "es. 25",
-    "placeholder_carb": "es. 40",
-    "placeholder_fat": "es. 10",
+    "placeholder_protein": "es. 50",
+    "placeholder_carb": "es. 10",
+    "placeholder_fat": "es. 5",
     "placeholder_email": "email@example.com"
   },
   "en": {
@@ -104,9 +104,9 @@
     "beta_invalid_email": "Please enter a valid email.",
     "beta_error": "Error sending email. Please try again.",
     "footer_note": "Early beta — feedback welcome",
-    "placeholder_protein": "e.g. 25",
-    "placeholder_carb": "e.g. 40",
-    "placeholder_fat": "e.g. 10",
+    "placeholder_protein": "e.g. 50",
+    "placeholder_carb": "e.g. 10",
+    "placeholder_fat": "e.g. 5",
     "placeholder_email": "email@example.com"
   },
   "es": {
@@ -159,9 +159,9 @@
     "beta_invalid_email": "Introduce un email válido.",
     "beta_error": "Error al enviar el correo. Inténtalo de nuevo.",
     "footer_note": "Beta temprana — comentarios bienvenidos",
-    "placeholder_protein": "ej. 25",
-    "placeholder_carb": "ej. 40",
-    "placeholder_fat": "ej. 10",
+    "placeholder_protein": "ej. 50",
+    "placeholder_carb": "ej. 10",
+    "placeholder_fat": "ej. 5",
     "placeholder_email": "email@example.com"
   }
 }
